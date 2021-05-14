@@ -11,18 +11,18 @@ class MainActivity4 : AppCompatActivity() {
         setContentView(R.layout.activity_main4)
 
         var bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.pantalla4
+        bottomNavigationView.selectedItemId = R.id.favpokes
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.pantalla2 ->{
+                R.id.misdex ->{
                     val intent = Intent(this, MainActivity2::class.java)
                     startActivity(intent)
                 }
-                R.id.pantalla3 ->{
+                R.id.favdex ->{
                     val intent = Intent(this, MainActivity3::class.java)
                     startActivity(intent)
                 }
-                R.id.pantalla1 ->{
+                R.id.perfil ->{
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }

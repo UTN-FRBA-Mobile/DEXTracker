@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }*/
         var bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.pantalla1
+        bottomNavigationView.selectedItemId = R.id.misdex
+      /*//CON ACTIVITIES
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.pantalla2 ->{
@@ -42,32 +43,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
-        }
-     /* //CON FRAGMENTS
-        val firstFragment = FirstFragment()
-        val secondFragment = SecondFragment()
-        makeCurrentFragment(firstFragment)
+        }*/
+        //CON FRAGMENTS
+        val perfilFragment = PerfilFragment()
+        val misDexFragment = MisDexFragment()
+        val favDexFragment = FavDexFragment()
+        val favPokesFragment = FavPokesFragment()
+        makeCurrentFragment(misDexFragment)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.pantalla1 -> {
-                    bottomNavigationView.selectedItemId = R.id.pantalla1
-                    makeCurrentFragment(firstFragment)
-                }
-                R.id.pantalla2 -> {
-                    bottomNavigationView.selectedItemId = R.id.pantalla2
-                    makeCurrentFragment(secondFragment)
-                }
-                R.id.pantalla3 -> {
-                    bottomNavigationView.selectedItemId = R.id.pantalla3
-                    makeCurrentFragment(firstFragment)
-                }
-                R.id.pantalla4 -> {
-                    bottomNavigationView.selectedItemId = R.id.pantalla4
-                    makeCurrentFragment(secondFragment)
-                }
+                R.id.perfil -> makeCurrentFragment(perfilFragment)
+                R.id.misdex -> makeCurrentFragment(misDexFragment)
+                R.id.favdex -> makeCurrentFragment(favDexFragment)
+                R.id.favpokes -> makeCurrentFragment(favPokesFragment)
             }
             true
-        }*/
+        }
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =
