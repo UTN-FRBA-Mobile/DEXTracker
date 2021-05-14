@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pantalla1"
+        android:title="Pantalla 1"
+        android:icon="@drawable/ic_dashboard"/><!--aca van los iconos de la barra-->
+    <item
+        android:id="@+id/pantalla2"
+        android:title="Pantalla 2"
+        android:icon="@drawable/ic_home"/><!--aca van los iconos de la barra-->
+    <item
+        android:id="@+id/pantalla3"
+        android:title="Pantalla 3"
+        android:icon="@drawable/ic_star"/><!--aca van los iconos de la barra-->
+    <item
+        android:id="@+id/pantalla4"
+        android:title="Pantalla 4"
+        android:icon="@drawable/ic_scanner"/><!--aca van los iconos de la barra-->
+</menu>
