@@ -10,6 +10,10 @@ import android.view.MenuItem
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //Thread.sleep(2000)  //Solo lo use para testear el splash
+        setTheme(R.style.Theme_DexTracker_NoActionBar)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
