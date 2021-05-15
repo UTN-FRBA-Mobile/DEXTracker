@@ -1,18 +1,16 @@
 package com.github.utn.frba.mobile.dextracker
 
-import android.content.Intent
+//import com.google.android.material.snackbar.Snackbar
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-//import com.google.android.material.snackbar.Snackbar
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //Thread.sleep(2000)  //Solo lo use para testear el splash
@@ -28,28 +26,11 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()*/
         }
 
-        var bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
-      /*//CON ACTIVITIES
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.pantalla2 ->{
-                    val intent = Intent(this, MainActivity2::class.java)
-                    startActivity(intent)
-                }
-                R.id.pantalla3 ->{
-                    val intent = Intent(this, MainActivity3::class.java)
-                    startActivity(intent)
-                }
-                R.id.pantalla4 ->{
-                    val intent = Intent(this, MainActivity4::class.java)
-                    startActivity(intent)
-                }
-            }
-            true
-        }*/
+
         //CON FRAGMENTS
         val perfilFragment = PerfilFragment()
         val misDexFragment = MisDexFragment()
