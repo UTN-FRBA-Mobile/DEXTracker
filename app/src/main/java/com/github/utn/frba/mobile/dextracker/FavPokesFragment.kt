@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
+import android.widget.SearchView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +36,10 @@ class FavPokesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fav_pokes, container, false)
+        val view = inflater.inflate(R.layout.fragment_fav_pokes, container, false)
+        val searchView = view.findViewById<SearchView>(R.id.searchView)
+        val gridView = view.findViewById<GridView>(R.id.gridView)
+        return view
     }
 
     companion object {
