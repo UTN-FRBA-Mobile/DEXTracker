@@ -2,12 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/perfil"
-        android:title="Mi perfil"
-        android:icon="@drawable/ic_dashboard"/><!--aca van los iconos de la barra-->
+        android:title="Perfil"
+        android:icon="@drawable/ic_baseline_person_pin_24"/><!--aca van los iconos de la barra-->
     <item
         android:id="@+id/misdex"
-        android:title="Mis PokeDEX"
-        android:icon="@drawable/ic_home"/><!--aca van los iconos de la barra-->
+        android:title="Mis DEX"
+        android:icon="@drawable/ic_dashboard"/><!--aca van los iconos de la barra-->
+    <item
+        android:id="@+id/espaciador"
+        android:title=""/>                  <!--Solo funciona esteticamente-->
     <item
         android:id="@+id/favdex"
         android:title="Fav DEX"
@@ -15,5 +18,5 @@
     <item
         android:id="@+id/favpokes"
         android:title="Fav Pokes"
-        android:icon="@drawable/ic_scanner"/><!--aca van los iconos de la barra-->
+        android:icon="@drawable/ic_star"/><!--aca van los iconos de la barra-->
 </menu>
