@@ -1,14 +1,23 @@
 package com.github.utn.frba.mobile.dextracker
 
 //import com.google.android.material.snackbar.Snackbar
+
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.zxing.integration.android.IntentIntegrator
+
+const val cameraRequestCode = 9999
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +30,20 @@ class MainActivity : AppCompatActivity() {
         //setSupportActionBar(findViewById(R.id.toolbar))
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Toast.makeText(this, "Aqui pondria el scanner...si tan solo tuviera uno", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,"Aqui pondria el scanner...si tan solo tuviera uno",Toast.LENGTH_LONG).show()
+            /*if(Permisos.checkForPermissions(
+                    this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    cameraRequestCode,
+                    "No se puede escanear un codigo si no tenemos acceso a tu camara"))
+                    {*/
+                    val scanner = IntentIntegrator(this)
+                    scanner.setOrientationLocked(false)
+                    scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+                    scanner.setPrompt("Escanea el codigo QR de la PokeDEX deseada")
+                    scanner.initiateScan()
+            //}
+
             /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()*/
         }
@@ -46,6 +68,43 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode == Activity.RESULT_OK){
+            val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+            if (result != null) {
+                if (result.contents == null) {
+                    Toast.makeText(this, "Cancelado :(", Toast.LENGTH_LONG).show()
+                } else {
+                    //Aca iria la redireccion hacia la DEX
+                    Toast.makeText(this, "Escaneado: " + result.contents, Toast.LENGTH_LONG).show()
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data)
+            }
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            cameraRequestCode -> {
+                if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val scanner = IntentIntegrator(this)
+                    scanner.setOrientationLocked(false)
+                    scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+                    scanner.setPrompt("Escanea el codigo QR de la PokeDEX deseada")
+                    scanner.initiateScan()
+                }
+                else {
+                    Toast.makeText(this, "No me diste permiso!", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =
