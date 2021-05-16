@@ -26,4 +26,13 @@
     <style name="SplashTheme" parent="Theme.DexTracker">
         <item name="android:windowBackground">@drawable/splashscreen</item>
     </style>
+
+    <style name="Theme.DexTracker.NoActionBar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DexTracker.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DexTracker.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
