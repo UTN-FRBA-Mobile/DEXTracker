@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_degrade_2">
+
+    <TextView
+        android:id="@+id/textview_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FAV POKES"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchFAVPOKES"/>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchFAVPOKES"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="Buscar Pokemon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/custom_background_search"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listFAVPOKES"
+        android:name="com.github.utn.frba.mobile.dextracker.FavPokes_Fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchFAVPOKES"
+        tools:context=".FavPokes_Fragment"
+        tools:listitem="@layout/fragment_fav_pokes_" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
