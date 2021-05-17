@@ -5,6 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,4 +65,27 @@ class InfoPokeFragment : Fragment() {
                 }
             }
     }
+
+    /*override fun onStart() {
+        super.onStart()
+        val service = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://dex-tracker.herokuapp.com/")
+            .build()
+            .create(InfoPokeService::class.java)
+
+        service.getPoke().enqueue(object: Callback<GetPokeResponse> {
+            override fun onResponse(call: Call<GetPokeResponse>, response: Response<GetPokeResponse>) {
+                infoPokeRecyclerViewAdapter = InfoPokeRecyclerViewAdapter(listener, response.body()!!.poke)
+                R.list.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = infoPokeRecyclerViewAdapter
+                }
+
+            }
+            override fun onFailure(call: Call<GetPokeResponse>, error: Throwable) {
+                Toast.makeText(activity, "No tweets founds!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }*/
 }

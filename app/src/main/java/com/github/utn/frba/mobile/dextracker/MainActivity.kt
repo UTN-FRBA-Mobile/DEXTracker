@@ -55,9 +55,13 @@ class MainActivity : AppCompatActivity() {
 
         //CON FRAGMENTS
         val perfilFragment = PerfilFragment()
-        val misDexFragment = MisDexFragment()
+        //Fragments viejos
+        /*val misDexFragment = MisDexFragment()
         val favDexFragment = FavDexFragment()
-        val favPokesFragment = FavPokesFragment()
+        val favPokesFragment = FavPokesFragment()*/
+        val misDexFragment = MisDEX_Fragment()
+        val favDexFragment = FavDEX_Fragment()
+        val favPokesFragment = FavPokes_Fragment()
         makeCurrentFragment(misDexFragment)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
