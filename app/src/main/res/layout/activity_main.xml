@@ -47,6 +47,12 @@
         android:textSize="50sp"
         android:layout_gravity="center"/>
 
+    <FrameLayout
+        android:id="@+id/fl_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation"/>
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -69,11 +75,6 @@
             app:menu="@menu/menu_navigation"/>
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <FrameLayout
-        android:id="@+id/fl_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
