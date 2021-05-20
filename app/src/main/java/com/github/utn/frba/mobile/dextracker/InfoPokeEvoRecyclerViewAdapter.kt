@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent.DummyItem
 import com.squareup.picasso.Picasso
 
@@ -24,32 +23,30 @@ class InfoPokeEvoRecyclerViewAdapter(
                 .inflate(R.layout.fragment_poke_evolution, parent, false)
         return ViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        for(item in evolutions){
-            holder.itemView.findViewById<TextView>(R.id.pokeevoname).text = "name: "+item.name
-            holder.itemView.findViewById<TextView>(R.id.pokeevotype).text = "type: "+item.method.type
-            if(item.method.level!=null)holder.itemView.findViewById<TextView>(R.id.pokelevel).text = "level: "+item.method.level.toString()
-                else holder.itemView.findViewById<TextView>(R.id.pokelevel).visibility = View.GONE
-            if(item.method.friendship!=null)holder.itemView.findViewById<TextView>(R.id.pokefriendship).text = "friendship: "+item.method.friendship.toString()
-                else holder.itemView.findViewById<TextView>(R.id.pokefriendship).visibility = View.GONE
-            if(item.method.move!=null)holder.itemView.findViewById<TextView>(R.id.pokemove).text = "move: "+item.method.move
-                else holder.itemView.findViewById<TextView>(R.id.pokemove).visibility = View.GONE
-            if(item.method.location!=null)holder.itemView.findViewById<TextView>(R.id.pokelocation).text = "location: "+item.method.location
-                else holder.itemView.findViewById<TextView>(R.id.pokelocation).visibility = View.GONE
-            if(item.method.time!=null)holder.itemView.findViewById<TextView>(R.id.poketime).text = "time: "+item.method.time
-                else holder.itemView.findViewById<TextView>(R.id.poketime).visibility = View.GONE
-            if(item.method.item!=null)holder.itemView.findViewById<TextView>(R.id.pokeitem).text = "item: "+item.method.item
-                else holder.itemView.findViewById<TextView>(R.id.pokeitem).visibility = View.GONE
-            if(item.method.gender!=null)holder.itemView.findViewById<TextView>(R.id.pokegender).text = "gender: "+item.method.gender
-                else holder.itemView.findViewById<TextView>(R.id.pokegender).visibility = View.GONE
-            if(item.method.upsideDown!=null)holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).text = "upsidedown: "+item.method.upsideDown.toString()
-                else holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).visibility = View.GONE
-            if(item.method.region!=null)holder.itemView.findViewById<TextView>(R.id.pokeregion).text = "region: "+item.method.region
-                else holder.itemView.findViewById<TextView>(R.id.pokeregion).visibility = View.GONE
-            if(item.method.pokemon!=null)holder.itemView.findViewById<TextView>(R.id.pokepokemon).text = "pokemon: "+item.method.pokemon
-                else holder.itemView.findViewById<TextView>(R.id.pokepokemon).visibility = View.GONE
-        }
+        val index = evolutions[position]
+        holder.itemView.findViewById<TextView>(R.id.pokeevoname).text = "name: "+index.name
+        holder.itemView.findViewById<TextView>(R.id.pokeevotype).text = "type: "+ index.method.type
+        if(index.method.level!=null)holder.itemView.findViewById<TextView>(R.id.pokelevel).text = "level: "+ index.method.level.toString()
+            else holder.itemView.findViewById<TextView>(R.id.pokelevel).visibility = View.GONE
+        if(index.method.friendship!=null)holder.itemView.findViewById<TextView>(R.id.pokefriendship).text = "friendship: "+ index.method.friendship.toString()
+            else holder.itemView.findViewById<TextView>(R.id.pokefriendship).visibility = View.GONE
+        if(index.method.move!=null)holder.itemView.findViewById<TextView>(R.id.pokemove).text = "move: "+ index.method.move
+            else holder.itemView.findViewById<TextView>(R.id.pokemove).visibility = View.GONE
+        if(index.method.location!=null)holder.itemView.findViewById<TextView>(R.id.pokelocation).text = "location: "+ index.method.location
+            else holder.itemView.findViewById<TextView>(R.id.pokelocation).visibility = View.GONE
+        if(index.method.time!=null)holder.itemView.findViewById<TextView>(R.id.poketime).text = "time: "+ index.method.time
+            else holder.itemView.findViewById<TextView>(R.id.poketime).visibility = View.GONE
+        if(index.method.item!=null)holder.itemView.findViewById<TextView>(R.id.pokeitem).text = "item: "+ index.method.item
+            else holder.itemView.findViewById<TextView>(R.id.pokeitem).visibility = View.GONE
+        if(index.method.gender!=null)holder.itemView.findViewById<TextView>(R.id.pokegender).text = "gender: "+ index.method.gender
+            else holder.itemView.findViewById<TextView>(R.id.pokegender).visibility = View.GONE
+        if(index.method.upsideDown!=null)holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).text = "upsidedown: "+ index.method.upsideDown.toString()
+            else holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).visibility = View.GONE
+        if(index.method.region!=null)holder.itemView.findViewById<TextView>(R.id.pokeregion).text = "region: "+ index.method.region
+            else holder.itemView.findViewById<TextView>(R.id.pokeregion).visibility = View.GONE
+        if(index.method.pokemon!=null)holder.itemView.findViewById<TextView>(R.id.pokepokemon).text = "pokemon: "+ index.method.pokemon
+            else holder.itemView.findViewById<TextView>(R.id.pokepokemon).visibility = View.GONE
     }
 
     override fun getItemCount(): Int = evolutions.size

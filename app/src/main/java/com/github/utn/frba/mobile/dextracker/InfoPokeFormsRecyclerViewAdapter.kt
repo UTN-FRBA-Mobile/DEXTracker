@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent.DummyItem
 import com.squareup.picasso.Picasso
 
@@ -26,9 +25,8 @@ class InfoPokeFormsRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        for(item in forms){
-            holder.itemView.findViewById<TextView>(R.id.pokeformname).text = "name: "+item.name
-        }
+        val index = forms[position]
+        holder.itemView.findViewById<TextView>(R.id.pokeformname).text = "name: "+index.name
     }
 
     override fun getItemCount(): Int = forms.size
