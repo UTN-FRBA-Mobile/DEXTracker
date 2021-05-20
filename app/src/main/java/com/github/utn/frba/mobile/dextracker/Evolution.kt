@@ -1,8 +1,20 @@
 package com.github.utn.frba.mobile.dextracker
-
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 data class Evolution(
     val name: String,
     val method: EvolutionMethod,
+)
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type",
+        visible = true,
+)
+@JsonSubTypes(
+        JsonSubTypes.Type(value = LevelUp::class, name = "LEVEL_UP"),
+        JsonSubTypes.Type(value = UseItem::class, name = "USE_ITEM"),
+        JsonSubTypes.Type(value = Trade::class, name = "TRADE"),
 )
 
 sealed class EvolutionMethod(val type: String)

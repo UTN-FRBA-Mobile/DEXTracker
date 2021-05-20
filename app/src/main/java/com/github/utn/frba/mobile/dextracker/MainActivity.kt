@@ -61,7 +61,11 @@ class MainActivity : AppCompatActivity() {
         val favPokesFragment = FavPokesFragment()*/
         val misDexFragment = MisDEX_Fragment()
         val favDexFragment = FavDEX_Fragment()
-        val favPokesFragment = FavPokes_Fragment()
+        /////////////////////////////////////////////////////////
+        //SOLO PARA TESTING
+        //val favPokesFragment = FavPokes_Fragment()
+        val favPokesFragment = InfoPokeFragment("hgss-national","eevee")
+        ////////////////////////////////////////////////////////
         makeCurrentFragment(misDexFragment)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
