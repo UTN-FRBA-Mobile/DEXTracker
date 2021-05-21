@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         /////////////////////////////////////////////////////////
         //SOLO PARA TESTING
         //val favPokesFragment = FavPokes_Fragment()
-        val favPokesFragment = InfoPokeFragment("hgss-national","eevee")
+        val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
         ////////////////////////////////////////////////////////
         makeCurrentFragment(misDexFragment)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
