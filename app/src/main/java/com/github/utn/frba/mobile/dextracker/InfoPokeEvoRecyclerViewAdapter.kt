@@ -25,7 +25,7 @@ class InfoPokeEvoRecyclerViewAdapter(
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val index = evolutions[position]
-        holder.itemView.findViewById<TextView>(R.id.pokeevoname).text = "name: "+index.name
+        holder.itemView.findViewById<TextView>(R.id.pokeevoname).text = index.name
         holder.itemView.findViewById<TextView>(R.id.pokeevotype).text = "type: "+ index.method.type
         if(index.method.level!=null)holder.itemView.findViewById<TextView>(R.id.pokelevel).text = "level: "+ index.method.level.toString()
             else holder.itemView.findViewById<TextView>(R.id.pokelevel).visibility = View.GONE

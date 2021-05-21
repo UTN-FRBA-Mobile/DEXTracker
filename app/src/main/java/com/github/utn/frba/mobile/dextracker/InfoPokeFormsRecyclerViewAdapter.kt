@@ -26,7 +26,7 @@ class InfoPokeFormsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val index = forms[position]
-        holder.itemView.findViewById<TextView>(R.id.pokeformname).text = "name: "+index.name
+        holder.itemView.findViewById<TextView>(R.id.pokeformname).text = index.name
     }
 
     override fun getItemCount(): Int = forms.size

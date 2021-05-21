@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent.DummyItem
 import com.squareup.picasso.Picasso
 
@@ -31,7 +30,7 @@ class InfoPokeRecyclerViewAdapter(
         //IMAGEN
         val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+poke.nationalPokedexNumber.toString()+".png"
 
-        holder.itemView.findViewById<TextView>(R.id.pokename).text = "name: "+poke.name
+        holder.itemView.findViewById<TextView>(R.id.pokename).text = poke.name
         holder.itemView.findViewById<TextView>(R.id.pokenationalPokedexNumber).text = "pokedex number: "+poke.nationalPokedexNumber.toString()
         holder.itemView.findViewById<TextView>(R.id.pokeprimaryAbility).text = "primary ability: "+poke.primaryAbility
         if(poke.secondaryAbility!=null)holder.itemView.findViewById<TextView>(R.id.pokesecondaryAbility).text = "secondary ability: "+poke.secondaryAbility

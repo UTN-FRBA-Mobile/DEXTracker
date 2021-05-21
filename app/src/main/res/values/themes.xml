@@ -14,9 +14,25 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.DexTracker.NoActionBar">
+    <style name="Theme.DexTracker.NoActionBar" parent="android:Widget.TextView">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/sans_serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.DexTracker.PokeInfo" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/indie_flower</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="Theme.DexTracker.PokeInfoEvoForm" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/indie_flower</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">true</item>
     </style>
 
     <style name="Theme.DexTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

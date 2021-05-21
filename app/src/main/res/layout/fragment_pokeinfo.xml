@@ -2,46 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.DexTracker.PokeInfo">
     <ImageView
         android:id="@+id/pokeimage"
-        android:layout_width="96dp"
-        android:layout_height="96dp" />
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
     <TextView
+        android:fontFamily="@font/pokemon_solid"
+        android:textSize="30sp"
+        android:textColor="@color/white"
         android:id="@+id/pokename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokenationalPokedexNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokeprimaryAbility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokesecondaryAbility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokehiddenAbility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokegen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
         android:layout_margin="@dimen/text_margin" />
 
 </LinearLayout>
