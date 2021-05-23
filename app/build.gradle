@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -68,7 +72,8 @@ dependencies {
     testImplementation 'io.kotest:kotest-assertions-core:4.4.0'
     testImplementation 'io.kotest:kotest-property:4.4.0'
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -79,5 +84,3 @@ android.testOptions {
         useJUnitPlatform()
     }
 }
-
-apply plugin: 'com.android.application'

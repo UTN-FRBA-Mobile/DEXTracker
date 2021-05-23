@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
-import com.github.utn.frba.mobile.dextracker.data.Session
 import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.session
+import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
+import com.github.utn.frba.mobile.dextracker.model.Session
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -21,6 +21,7 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var sessionStorage: SessionStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,25 +33,33 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        sessionStorage = SessionStorage(this)
     }
 
     override fun onStart() {
         super.onStart()
-        val account = GoogleSignIn.getLastSignedInAccount(this)
 
-        signInFromGoogle()
-        if (account == null) signInFromGoogle()
-        else signIn(account)
+        val session = sessionStorage.get()
+
+        if (session == null) {
+            val account = GoogleSignIn.getLastSignedInAccount(this)
+
+            signInFromGoogle()
+            if (account == null) signInFromGoogle()
+            else signIn(account)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account = task.getResult(ApiException::class.java)
-                ?: run { throw RuntimeException("onono se rompió el login") }
-            signIn(account)
+        when (requestCode) {
+            RC_SIGN_IN -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                    ?: run { throw RuntimeException("onono se rompió el login") }
+                signIn(account)
+            }
         }
     }
 
@@ -77,11 +86,12 @@ class LoginActivity : AppCompatActivity() {
                         }
                         ?.let { (user, cookie) ->
                             val token = cookie.drop("dex-token=".length)
-                            session = Session(
+                            val session = Session(
                                 user = user,
                                 token = if (token.endsWith(";")) token.dropLast(1) else token,
                             )
-                            // TODO: persistir el dex-token para evitar el login contra google cada vez que levante la app
+
+                            sessionStorage.store(session)
 
                             val intent = Intent(this@LoginActivity, PokedexActivity::class.java)
                             startActivity(intent)
