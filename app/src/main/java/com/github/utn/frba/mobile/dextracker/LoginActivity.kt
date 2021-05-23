@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.Session
 import com.github.utn.frba.mobile.dextracker.data.User
+import com.github.utn.frba.mobile.dextracker.data.session
 import com.github.utn.frba.mobile.dextracker.extensions.both
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +21,6 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var session: Session
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +81,7 @@ class LoginActivity : AppCompatActivity() {
                                 user = user,
                                 token = if (token.endsWith(";")) token.dropLast(1) else token,
                             )
+                            // TODO: persistir el dex-token para evitar el login contra google cada vez que levante la app
 
                             val intent = Intent(this@LoginActivity, PokedexActivity::class.java)
                             startActivity(intent)

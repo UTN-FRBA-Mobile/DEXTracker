@@ -1,5 +1,8 @@
 package com.github.utn.frba.mobile.dextracker.data
 
+// TODO: si hacemos el LoginActivity el launcher, después podríamos transicionar al MainActivity con un val en lugar de usar un var
+lateinit var session: Session
+
 data class Session(
     val userId: String,
     val dexToken: String,
