@@ -47,7 +47,10 @@ class LoginActivity : AppCompatActivity() {
             if (session == null) {
                 val account = GoogleSignIn.getLastSignedInAccount(this@LoginActivity)
 
-                if (account == null) signInIntoGoogle()
+                if (account == null) {
+                    Log.i(TAG, "No google account, redirecting to oauth login")
+                    signInIntoGoogle()
+                }
                 else signInFromOAuth(account)
             } else validateStoredSession(session)
         }

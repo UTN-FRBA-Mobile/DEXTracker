@@ -23,7 +23,7 @@ class PokedexActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pokedex)
 
         recyclerView = findViewById(R.id.pokedex_recycler_view)
-        userDexAdapter = UserDexAdapter(this)
+        userDexAdapter = UserDexAdapter()
         recyclerView.adapter = userDexAdapter
 
         val layoutManager = GridLayoutManager(this, 3)
@@ -32,7 +32,6 @@ class PokedexActivity : AppCompatActivity() {
 
         fetchPokedex()
     }
-
 
     private fun fetchPokedex() {
         val callResponse = dexTrackerService.fetchUserDex(userId = userId, dexId = dexId)

@@ -5,12 +5,10 @@ package com.github.utn.frba.mobile.dextracker
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -59,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         /*val misDexFragment = MisDexFragment()
         val favDexFragment = FavDexFragment()
         val favPokesFragment = FavPokesFragment()*/
-        val misDexFragment = MisDEX_Fragment()
+        val misDexFragment = MyDexFragment()
         val favDexFragment = FavDEX_Fragment()
         val favPokesFragment = FavPokes_Fragment()
         makeCurrentFragment(misDexFragment)

@@ -21,22 +21,5 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_pokedex">PokedexActivity</string>
-    <string name="bulbasaur">Bulbasaur</string>
-    <string name="ivysaur">Ivysaur</string>
-    <string name="venusaur">Venusaur</string>
-    <string name="charmander">Charmander</string>
-    <string name="charmeleon">Charmeleon</string>
-    <string name="charizard">Charizard</string>
-    <string name="squirtle">Squirtle</string>
-    <string name="wartortle">Wartortle</string>
-    <string name="blastoise">Blastoise</string>
-    <string name="caterpie">Caterpie</string>
-    <string name="metapod">Metapod</string>
-    <string name="butterfree">Butterfree</string>
-    <string name="weedle">Weedle</string>
-    <string name="kakuna">Kakuna</string>
-    <string name="beedrill">Beedrill</string>
-    <string name="pidgey">Pidgey</string>
-    <string name="pidgeotto">Pidgeotto</string>
-    <string name="pidgeot">Pidgeot</string>
+    <string name="pokemon_icon">pokemon_icon</string>
 </resources>
