@@ -8,8 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-//private const val host = "https://dex-tracker.herokuapp.com"
-private const val host = "http://192.168.0.13:9290"
+private const val host = "https://dex-tracker.herokuapp.com"
 
 private val dexTrackerClient: Retrofit = Retrofit.Builder()
     .baseUrl("$host/api/v1/")
@@ -22,17 +21,16 @@ interface DexTrackerService {
     @GET("users/{user_id}/pokedex/{dex_id}")
     fun fetchUserDex(
         @Path("user_id") userId: String,
-        @Path("dex_id") dexId: String
+        @Path("dex_id") dexId: String,
     ): Call<UserDex>
 
     @POST("login")
     fun loginFromMail(
-        @Body login: LoginRequest
+        @Body login: LoginRequest,
     ): Call<User>
 
-    @POST("login")
-    fun loginFromToken(
+    @POST("token")
+    fun validate(
         @Header("dex-token") token: String,
-        @Header("dex-client") dexClient: String = "android",
-    ): Call<User>
+    ): Call<Unit>
 }

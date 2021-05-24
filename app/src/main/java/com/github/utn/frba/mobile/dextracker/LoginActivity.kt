@@ -47,9 +47,9 @@ class LoginActivity : AppCompatActivity() {
             if (session == null) {
                 val account = GoogleSignIn.getLastSignedInAccount(this@LoginActivity)
 
-                if (account == null) signInFromGoogle()
-                else signInFromMail(account)
-            } else signInFromStoredSession(session)
+                if (account == null) signInIntoGoogle()
+                else signInFromOAuth(account)
+            } else validateStoredSession(session)
         }
 
     }
@@ -62,37 +62,37 @@ class LoginActivity : AppCompatActivity() {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 val account = task.getResult(ApiException::class.java)
                     ?: run { throw RuntimeException("onono se rompió el login") }
-                signInFromMail(account)
+                signInFromOAuth(account)
             }
         }
     }
 
-    private fun signInFromGoogle() {
+    private fun signInIntoGoogle() {
         val signInIntent: Intent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    private fun signInFromStoredSession(session: Session) {
-        dexTrackerService.loginFromToken(token = session.dexToken)
-            .enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
+    private fun validateStoredSession(session: Session) {
+        dexTrackerService.validate(token = session.dexToken)
+            .enqueue(object : Callback<Unit> {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                     if (response.isSuccessful) redirectToMain(session)
                     else {
                         Log.w(
                             TAG,
                             "Login from stored session failed: ${response.code()}, ${response.body()}"
                         )
-                        signInFromGoogle()
+                        signInIntoGoogle()
                     }
                 }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Log.e(TAG, "ononono se rompió la verificación del token perrito", t)
                 }
             })
     }
 
-    private fun signInFromMail(account: GoogleSignInAccount) {
+    private fun signInFromOAuth(account: GoogleSignInAccount) {
         val request = LoginRequest(
             mail = account.email!!,
             googleToken = account.idToken!!,
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun redirectToMain(session: Session) {
         InMemoryRepository.session = session
-        val intent = Intent(this@LoginActivity, PokedexActivity::class.java)
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
         startActivity(intent)
     }
 
