@@ -28,7 +28,18 @@ class MyDexFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_my_dex, container, false).also {
             recyclerView = it.findViewById(R.id.my_dex_recycler_view)
-            myDexAdapter = MyDexAdapter(session.pokedex)
+            myDexAdapter = MyDexAdapter(session.pokedex) { dexId, userId ->
+                parentFragmentManager.beginTransaction().apply {
+                    replace(
+                        R.id.fl_wrapper,
+                        PokedexFragment.newInstance(
+                            userId = userId,
+                            dexId = dexId,
+                        )
+                    )
+                    commit()
+                }
+            }
             recyclerView.adapter = myDexAdapter
 
             val layoutManager = GridLayoutManager(context, 1)

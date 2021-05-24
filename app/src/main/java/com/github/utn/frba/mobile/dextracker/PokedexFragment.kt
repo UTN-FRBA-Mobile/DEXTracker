@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ class PokedexFragment : Fragment() {
     private lateinit var userDexAdapter: UserDexAdapter
     private lateinit var userId: String
     private lateinit var dexId: String
+    private lateinit var spinner: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +40,11 @@ class PokedexFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.activity_pokedex, container, false).also {
+        return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
             userDexAdapter = UserDexAdapter()
             recyclerView.adapter = userDexAdapter
+            spinner = it.findViewById(R.id.pokedex_spinner)
 
             val layoutManager = GridLayoutManager(context, 3)
             recyclerView.layoutManager = layoutManager
@@ -56,6 +59,7 @@ class PokedexFragment : Fragment() {
 
         callResponse.enqueue(object : Callback<UserDex> {
             override fun onResponse(call: Call<UserDex>, response: Response<UserDex>) {
+                spinner.visibility = View.GONE
                 response.takeIf { it.isSuccessful }
                     ?.body()
                     ?.run { userDexAdapter.add(this.pokemon) }

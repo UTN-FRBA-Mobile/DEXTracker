@@ -11,10 +11,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
+import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import kotlin.properties.Delegates
 
 class MyDexAdapter(
     private val dex: List<PokedexRef>,
+    private val onClick: (String, String) -> Unit,
 ) : RecyclerView.Adapter<MyDexAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.my_dex_card, parent, false)
@@ -25,6 +27,7 @@ class MyDexAdapter(
         holder.title = d.game.displayName
         holder.completion = d.caught to d.total
         holder.completionPercentage = d.caught / d.total
+        holder.dexId = d.id
     }
 
     override fun getItemCount(): Int = dex.size
@@ -49,10 +52,12 @@ class MyDexAdapter(
             completionView.text = "$caught/$total"
         }
 
+        lateinit var dexId: String
+
         init {
             cardView.setOnClickListener {
-                // TODO: change current fragment to a new PokdexFragment
                 Log.i(TAG, "Clicked on $title")
+                onClick(dexId, InMemoryRepository.session.userId)
             }
         }
     }
