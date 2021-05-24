@@ -1,7 +1,6 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +24,15 @@ class MyDexFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_my_dex, container, false).also {
-        recyclerView = it.findViewById(R.id.my_dex_recycler_view)
-        myDexAdapter = MyDexAdapter(session.pokedex)
-        recyclerView.adapter = myDexAdapter
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_my_dex, container, false).also {
+            recyclerView = it.findViewById(R.id.my_dex_recycler_view)
+            myDexAdapter = MyDexAdapter(session.pokedex)
+            recyclerView.adapter = myDexAdapter
 
-        val layoutManager = GridLayoutManager(context, 1)
-        recyclerView.layoutManager = layoutManager
+            val layoutManager = GridLayoutManager(context, 1)
+            recyclerView.layoutManager = layoutManager
+        }
     }
 }

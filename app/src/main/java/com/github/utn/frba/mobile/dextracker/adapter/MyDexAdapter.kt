@@ -1,11 +1,13 @@
 package com.github.utn.frba.mobile.dextracker.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
@@ -28,6 +30,7 @@ class MyDexAdapter(
     override fun getItemCount(): Int = dex.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val cardView: CardView = itemView.findViewById(R.id.my_dex_card)
         private val iconView: ImageView = itemView.findViewById(R.id.my_dex_icon)
         private val titleView: TextView = itemView.findViewById(R.id.my_dex_title)
         private val completionPercentageView: TextView = itemView.findViewById(
@@ -45,5 +48,16 @@ class MyDexAdapter(
         var completion: Pair<Int, Int> by Delegates.observable(0 to 0) { _, _, (caught, total) ->
             completionView.text = "$caught/$total"
         }
+
+        init {
+            cardView.setOnClickListener {
+                // TODO: change current fragment to a new PokdexFragment
+                Log.i(TAG, "Clicked on $title")
+            }
+        }
+    }
+
+    companion object {
+        private const val TAG = "MY_DEX"
     }
 }

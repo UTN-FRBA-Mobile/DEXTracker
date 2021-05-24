@@ -2,7 +2,10 @@ package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.UserDexAdapter
@@ -12,7 +15,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokedexActivity : AppCompatActivity() {
+private const val USER_ID = "userId"
+private const val DEX_ID = "dexId"
+
+class PokedexFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var userDexAdapter: UserDexAdapter
     private lateinit var userId: String
@@ -20,17 +26,29 @@ class PokedexActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pokedex)
+        arguments?.let {
+            userId = it.getString(USER_ID)!!
+            dexId = it.getString(DEX_ID)!!
+        }
+    }
 
-        recyclerView = findViewById(R.id.pokedex_recycler_view)
-        userDexAdapter = UserDexAdapter()
-        recyclerView.adapter = userDexAdapter
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.activity_pokedex, container, false).also {
+            recyclerView = it.findViewById(R.id.pokedex_recycler_view)
+            userDexAdapter = UserDexAdapter()
+            recyclerView.adapter = userDexAdapter
 
-        val layoutManager = GridLayoutManager(this, 3)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setPadding(32, 128, 32, 0)
+            val layoutManager = GridLayoutManager(context, 3)
+            recyclerView.layoutManager = layoutManager
+            recyclerView.setPadding(32, 128, 32, 0)
 
-        fetchPokedex()
+            fetchPokedex()
+        }
     }
 
     private fun fetchPokedex() {
@@ -55,5 +73,13 @@ class PokedexActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "USER_DEX"
+
+        @JvmStatic
+        fun newInstance(userId: String, dexId: String) = PokedexFragment().apply {
+            arguments = Bundle().apply {
+                putString(USER_ID, userId)
+                putString(DEX_ID, dexId)
+            }
+        }
     }
 }

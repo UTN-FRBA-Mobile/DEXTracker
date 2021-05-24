@@ -13,6 +13,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
