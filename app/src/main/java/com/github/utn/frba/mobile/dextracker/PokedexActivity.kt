@@ -15,6 +15,8 @@ import retrofit2.Response
 class PokedexActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var userDexAdapter: UserDexAdapter
+    private lateinit var userId: String
+    private lateinit var dexId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,10 @@ class PokedexActivity : AppCompatActivity() {
                 response.takeIf { it.isSuccessful }
                     ?.body()
                     ?.run { userDexAdapter.add(this.pokemon) }
-                    ?: Log.e(TAG, "ononono falló el servicio perro: ${response.code()}")
+                    ?: Log.e(
+                        TAG,
+                        "ononono falló el servicio perro: ${response.code()}, ${response.body()}",
+                    )
             }
 
             override fun onFailure(call: Call<UserDex>, t: Throwable) {
@@ -51,7 +56,5 @@ class PokedexActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "USER_DEX"
-        private const val userId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4"
-        private const val dexId = "UD-2021-04-18-805b06a5-337c-4941-a860-a5d493b264b9"
     }
 }

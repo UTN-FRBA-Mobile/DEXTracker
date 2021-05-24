@@ -6,13 +6,13 @@ import com.github.utn.frba.mobile.dextracker.data.UserDex
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
+
+//private const val host = "https://dex-tracker.herokuapp.com"
+private const val host = "http://192.168.0.13:9290"
 
 private val dexTrackerClient: Retrofit = Retrofit.Builder()
-    .baseUrl("https://dex-tracker.herokuapp.com/api/v1/")
+    .baseUrl("$host/api/v1/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
@@ -28,5 +28,11 @@ interface DexTrackerService {
     @POST("login")
     fun loginFromMail(
         @Body login: LoginRequest
+    ): Call<User>
+
+    @POST("login")
+    fun loginFromToken(
+        @Header("dex-token") token: String,
+        @Header("dex-client") dexClient: String = "android",
     ): Call<User>
 }

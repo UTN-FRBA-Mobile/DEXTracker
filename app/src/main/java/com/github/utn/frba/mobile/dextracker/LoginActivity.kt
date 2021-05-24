@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
 import com.github.utn.frba.mobile.dextracker.model.Session
+import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -39,15 +41,17 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        val session = sessionStorage.get()
+        AsyncCoroutineExecutor.dispatch {
+            val session = sessionStorage.get()
 
-        if (session == null) {
-            val account = GoogleSignIn.getLastSignedInAccount(this)
+            if (session == null) {
+                val account = GoogleSignIn.getLastSignedInAccount(this@LoginActivity)
 
-            signInFromGoogle()
-            if (account == null) signInFromGoogle()
-            else signIn(account)
+                if (account == null) signInFromGoogle()
+                else signInFromMail(account)
+            } else signInFromStoredSession(session)
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 val account = task.getResult(ApiException::class.java)
                     ?: run { throw RuntimeException("onono se rompió el login") }
-                signIn(account)
+                signInFromMail(account)
             }
         }
     }
@@ -68,7 +72,27 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    private fun signIn(account: GoogleSignInAccount) {
+    private fun signInFromStoredSession(session: Session) {
+        dexTrackerService.loginFromToken(token = session.dexToken)
+            .enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful) redirectToMain(session)
+                    else {
+                        Log.w(
+                            TAG,
+                            "Login from stored session failed: ${response.code()}, ${response.body()}"
+                        )
+                        signInFromGoogle()
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Log.e(TAG, "ononono se rompió la verificación del token perrito", t)
+                }
+            })
+    }
+
+    private fun signInFromMail(account: GoogleSignInAccount) {
         val request = LoginRequest(
             mail = account.email!!,
             googleToken = account.idToken!!,
@@ -81,20 +105,18 @@ class LoginActivity : AppCompatActivity() {
                         ?.let {
                             it.both(
                                 { res -> res.body() },
-                                { res -> res.headers().get("Set-Cookie") }
+                                { res -> res.headers().get("dex-token") }
                             )
                         }
-                        ?.let { (user, cookie) ->
-                            val token = cookie.drop("dex-token=".length)
+                        ?.let { (user, token) ->
                             val session = Session(
                                 user = user,
-                                token = if (token.endsWith(";")) token.dropLast(1) else token,
+                                token = token,
                             )
 
-                            sessionStorage.store(session)
+                            AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
 
-                            val intent = Intent(this@LoginActivity, PokedexActivity::class.java)
-                            startActivity(intent)
+                            redirectToMain(session)
                         } ?: run {
                         Log.e(
                             TAG,
@@ -107,6 +129,12 @@ class LoginActivity : AppCompatActivity() {
                     Log.e(TAG, "ononon se rompió algo perro", t)
                 }
             })
+    }
+
+    private fun redirectToMain(session: Session) {
+        InMemoryRepository.session = session
+        val intent = Intent(this@LoginActivity, PokedexActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {

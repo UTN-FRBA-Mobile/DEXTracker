@@ -1,23 +1,17 @@
 package com.github.utn.frba.mobile.dextracker.db.storage
 
 import android.content.Context
-import com.github.utn.frba.mobile.dextracker.db.dao.PokedexDAO
-import com.github.utn.frba.mobile.dextracker.db.dao.SessionDAO
 import com.github.utn.frba.mobile.dextracker.db.db
 import com.github.utn.frba.mobile.dextracker.db.table.PokedexRow
+import com.github.utn.frba.mobile.dextracker.db.table.SessionRow
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
 
 class SessionStorage(context: Context) {
-    private val sessionDao: SessionDAO
-    private val pokedexDao: PokedexDAO
+    private val sessionDao = db(context).sessionDao()
+    private val pokedexDao = db(context).pokedexDao()
 
-    init {
-        sessionDao = db(context).sessionDao()
-        pokedexDao = db(context).pokedexDao()
-    }
-
-    fun get(): Session? = sessionDao.storedSession()?.let { session ->
+    suspend fun get(): Session? = sessionDao.storedSession()?.let { session ->
         val pokedex = pokedexDao.findAll(session.userId)
         Session(
             userId = session.userId,
@@ -33,8 +27,16 @@ class SessionStorage(context: Context) {
         )
     }
 
-    fun store(session: Session) {
+    suspend fun store(session: Session) {
         pokedexDao.delete(session.userId)
+        sessionDao.drop()
+
+        sessionDao.save(
+            SessionRow(
+                dexToken = session.dexToken,
+                userId = session.userId,
+            )
+        )
         pokedexDao.saveAll(session.pokedex.map {
             PokedexRow(
                 id = it.id,

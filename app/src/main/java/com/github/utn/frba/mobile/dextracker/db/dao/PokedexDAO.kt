@@ -8,11 +8,11 @@ import com.github.utn.frba.mobile.dextracker.db.table.PokedexRow
 @Dao
 interface PokedexDAO {
     @Query("SELECT * from PokedexRow where userOwnerId = :userId")
-    fun findAll(userId: String): List<PokedexRow>
+    suspend fun findAll(userId: String): List<PokedexRow>
 
     @Query("DELETE from PokedexRow where userOwnerId = :userId")
-    fun delete(userId: String)
+    suspend fun delete(userId: String)
 
     @Insert
-    fun saveAll(pokedex: List<PokedexRow>)
+    suspend fun saveAll(pokedex: List<PokedexRow>)
 }
