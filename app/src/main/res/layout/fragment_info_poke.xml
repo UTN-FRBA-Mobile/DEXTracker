@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_degrade_2"
     tools:context=".InfoPokeFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="INFO POKE" />
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_pokeinfo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerviewevo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_poke_evolution"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerview"/>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerviewforms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_poke_form"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerviewevo"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navbar_margin"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerviewforms"/>
 
-</FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
