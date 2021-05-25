@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:theme="@style/Theme.DexTracker.PokeInfoEvoForm">
+    <TextView
+        android:id="@+id/pokeforms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Form: "
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_margin="@dimen/text_margin" />
+    <ImageView
+        android:id="@+id/pokeimage"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:visibility="gone"/> <!--CAMBIAR SI LE AGREGAMOS IMAGEN-->
+    <TextView
+        android:id="@+id/pokeformname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin" />
+</LinearLayout>

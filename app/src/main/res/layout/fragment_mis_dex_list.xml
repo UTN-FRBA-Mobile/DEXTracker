@@ -4,19 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_degrade_3">
+    android:background="@drawable/fondo_degrade_4">
 
     <TextView
         android:id="@+id/textview_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FAV DEX"
+        android:text="MIS DEX"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchFAVDEX"/>
+        app:layout_constraintTop_toBottomOf="@+id/searchMISDEX"/>
+    <TextView
+        android:id="@+id/textview_first1"
+        android:layout_width="wrap_content"
+        android:layout_height="600dp"
+        android:text="MIS DEX"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_first"/>
+    <TextView
+        android:id="@+id/textview_first2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIS DEX"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_first1"/>
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchFAVDEX"
+        android:id="@+id/searchMISDEX"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:iconifiedByDefault="false"
@@ -25,8 +41,8 @@
         android:background="@drawable/custom_background_search"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listFAVDEX"
-        android:name="com.github.utn.frba.mobile.dextracker.FavDEX_Fragment"
+        android:id="@+id/listMISDEX"
+        android:name="com.github.utn.frba.mobile.dextracker.MisDEX_Fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -35,8 +51,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchFAVDEX"
-        tools:context=".FavDEX_Fragment"
-        tools:listitem="@layout/fragment_fav_dex_" />
+        app:layout_constraintTop_toBottomOf="@+id/searchMISDEX"
+        tools:context=".MisDEX_Fragment"
+        tools:listitem="@layout/fragment_mis_dex_" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
