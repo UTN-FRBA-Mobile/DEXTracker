@@ -50,8 +50,7 @@ class LoginActivity : AppCompatActivity() {
                 if (account == null) {
                     Log.i(TAG, "No google account, redirecting to oauth login")
                     signInIntoGoogle()
-                }
-                else signInFromOAuth(account)
+                } else signInFromOAuth(account)
             } else validateStoredSession(session)
         }
 
@@ -72,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInIntoGoogle() {
         val signInIntent: Intent = mGoogleSignInClient.signInIntent
+        signInIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
@@ -137,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
     private fun redirectToMain(session: Session) {
         InMemoryRepository.session = session
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(intent)
     }
 
