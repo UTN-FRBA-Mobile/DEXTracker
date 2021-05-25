@@ -82,21 +82,25 @@ class InfoPokeFragment(
                 if(220 == testModel.evolutions[0].method.friendship)
                     Log.i(TAG, "pokemon "+Gson().toJson(testModel))
                 Log.i(TAG, "poke "+Gson().toJson(response.body()))*/
-                infoPokeRecyclerViewAdapter = InfoPokeRecyclerViewAdapter(listener, response.body()!!)
-                with(recyclerView) {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = infoPokeRecyclerViewAdapter
+                if(response.body() != null){
+                    infoPokeRecyclerViewAdapter = InfoPokeRecyclerViewAdapter(listener, response.body()!!)
+                    with(recyclerView) {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = infoPokeRecyclerViewAdapter
+                    }
+                    infoPokeEvoRecyclerViewAdapter = InfoPokeEvoRecyclerViewAdapter(response.body()!!.evolutions)
+                    with(recyclerViewevo) {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = infoPokeEvoRecyclerViewAdapter
+                    }
+                    infoPokeFormsRecyclerViewAdapter = InfoPokeFormsRecyclerViewAdapter(response.body()!!.forms)
+                    with(recyclerViewforms) {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = infoPokeFormsRecyclerViewAdapter
+                    }
                 }
-                infoPokeEvoRecyclerViewAdapter = InfoPokeEvoRecyclerViewAdapter(response.body()!!.evolutions)
-                with(recyclerViewevo) {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = infoPokeEvoRecyclerViewAdapter
-                }
-                infoPokeFormsRecyclerViewAdapter = InfoPokeFormsRecyclerViewAdapter(response.body()!!.forms)
-                with(recyclerViewforms) {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = infoPokeFormsRecyclerViewAdapter
-                }
+                else
+                    Toast.makeText(activity, "Pokemon no encontrado", Toast.LENGTH_SHORT).show()
             }
             override fun onFailure(call: Call<GetPokeResponse>, error: Throwable) {
                 Toast.makeText(activity, "No responde API", Toast.LENGTH_SHORT).show()

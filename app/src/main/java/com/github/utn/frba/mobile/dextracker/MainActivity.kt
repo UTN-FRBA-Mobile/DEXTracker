@@ -53,18 +53,13 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
 
-        //CON FRAGMENTS
         val perfilFragment = PerfilFragment()
-        //Fragments viejos
-        /*val misDexFragment = MisDexFragment()
-        val favDexFragment = FavDexFragment()
-        val favPokesFragment = FavPokesFragment()*/
         val misDexFragment = MisDEX_Fragment()
         val favDexFragment = FavDEX_Fragment()
+        val favPokesFragment = FavPokes_Fragment()
         /////////////////////////////////////////////////////////
         //SOLO PARA TESTING
-        //val favPokesFragment = FavPokes_Fragment()
-        val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
+        //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
         ////////////////////////////////////////////////////////
         makeCurrentFragment(misDexFragment)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
