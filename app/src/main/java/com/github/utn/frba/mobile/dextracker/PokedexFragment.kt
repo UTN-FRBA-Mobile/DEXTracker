@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.UserDexAdapter
 import com.github.utn.frba.mobile.dextracker.data.UserDex
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.properties.Delegates
 
 private const val USER_ID = "userId"
 private const val DEX_ID = "dexId"
@@ -26,6 +28,16 @@ class PokedexFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var dexId: String
     private lateinit var spinner: ProgressBar
+    private lateinit var searchView: SearchView
+    private lateinit var userDex: UserDex
+    private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
+        userDexAdapter.isEditing = new
+        if (new) {
+            searchView.visibility = View.GONE
+        } else {
+            searchView.visibility = View.VISIBLE
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +55,20 @@ class PokedexFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
-            userDexAdapter = UserDexAdapter()
+            userDexAdapter = UserDexAdapter(
+                openEditor = { isEditing = true },
+                openPokemonInfo = { p ->
+                    replaceWith(
+                        resourceId = R.id.fl_wrapper,
+                        other = InfoPokeFragment.newInstance(
+                            "param1",
+                            "param2",
+                            userDex.game.name,
+                            p,
+                        ),
+                    )
+                }
+            )
             recyclerView.adapter = userDexAdapter
             spinner = it.findViewById(R.id.pokedex_spinner)
 
@@ -51,8 +76,8 @@ class PokedexFragment : Fragment() {
             recyclerView.layoutManager = layoutManager
             recyclerView.setPadding(32, 128, 32, 0)
 
-            it.findViewById<SearchView>(R.id.pokedex_search_bar)
-                .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            searchView = it.findViewById<SearchView>(R.id.pokedex_search_bar).apply {
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         userDexAdapter.searchText = query ?: ""
                         return true
@@ -63,6 +88,7 @@ class PokedexFragment : Fragment() {
                         return true
                     }
                 })
+            }
 
             fetchPokedex()
         }
@@ -76,7 +102,10 @@ class PokedexFragment : Fragment() {
                 spinner.visibility = View.GONE
                 response.takeIf { it.isSuccessful }
                     ?.body()
-                    ?.run { userDexAdapter.add(this.pokemon) }
+                    ?.run {
+                        userDex = this
+                        userDexAdapter.add(this.pokemon)
+                    }
                     ?: Log.e(
                         TAG,
                         "ononono falló el servicio perro: ${response.code()}, ${response.body()}",

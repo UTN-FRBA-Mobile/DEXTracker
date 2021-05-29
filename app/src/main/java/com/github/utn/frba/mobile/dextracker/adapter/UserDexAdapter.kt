@@ -12,13 +12,17 @@ import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import java.util.*
 import kotlin.properties.Delegates
 
-class UserDexAdapter : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
+class UserDexAdapter(
+    private val openEditor: () -> Unit,
+    private val openPokemonInfo: (String) -> Unit,
+) : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
     var searchText: String by Delegates.observable("") { _, _, new ->
         filter(new)
     }
 
     private var dataset: MutableList<UserDexPokemon> = mutableListOf()
     private var originalDataset: List<UserDexPokemon> = emptyList()
+    var isEditing: Boolean = false
 
     fun add(userDex: List<UserDexPokemon>) {
         dataset.addAll(userDex)
@@ -78,8 +82,14 @@ class UserDexAdapter : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
 
         init {
             imageView.setImageResource(R.drawable.placeholder)
-            itemView.setOnClickListener {
+            itemView.setOnLongClickListener {
+                openEditor()
                 caught = !caught
+                true
+            }
+            itemView.setOnClickListener {
+                if (isEditing) caught = !caught
+                else openPokemonInfo(this.name)
             }
         }
 
