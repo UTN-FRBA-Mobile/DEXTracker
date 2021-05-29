@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,19 @@ class PokedexFragment : Fragment() {
             val layoutManager = GridLayoutManager(context, 3)
             recyclerView.layoutManager = layoutManager
             recyclerView.setPadding(32, 128, 32, 0)
+
+            it.findViewById<SearchView>(R.id.pokedex_search_bar)
+                .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        userDexAdapter.searchText = query ?: ""
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        userDexAdapter.searchText = newText ?: ""
+                        return true
+                    }
+                })
 
             fetchPokedex()
         }

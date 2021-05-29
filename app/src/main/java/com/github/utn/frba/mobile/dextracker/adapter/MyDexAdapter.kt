@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import java.util.*
 import kotlin.properties.Delegates
 
 class MyDexAdapter(
@@ -41,7 +42,11 @@ class MyDexAdapter(
         dex = if (search == "") {
             originalDex
         } else {
-            originalDex.filter { it.game.displayName.startsWith(search) }
+            originalDex.filter {
+                it.game.displayName
+                    .toLowerCase(Locale.getDefault())
+                    .contains(search.toLowerCase(Locale.getDefault()))
+            }
         }
         notifyDataSetChanged()
     }
@@ -75,8 +80,6 @@ class MyDexAdapter(
             }
         }
     }
-
-    private fun shouldRender(t: String) = searchText == "" || t.startsWith(searchText)
 
     companion object {
         private const val TAG = "MY_DEX"

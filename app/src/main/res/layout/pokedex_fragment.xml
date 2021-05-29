@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/navbar_margin"
     android:paddingStart="16dp"
     android:paddingTop="16dp"
     android:paddingEnd="16dp"
-    android:layout_marginBottom="@dimen/navbar_margin"
     tools:context="com.github.utn.frba.mobile.dextracker.PokedexFragment">
 
     <ProgressBar
@@ -19,9 +21,23 @@
         android:progressDrawable="@drawable/circular_progress_bar"
         android:visibility="visible" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/pokedex_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/custom_background_search"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="Buscar PokeDex" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pokedex_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/pokedex_search_bar"
+        android:layout_marginTop="16dp" />
 
 </RelativeLayout>

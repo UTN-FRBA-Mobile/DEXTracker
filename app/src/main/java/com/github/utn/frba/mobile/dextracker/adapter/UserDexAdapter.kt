@@ -8,14 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.UserDexPokemon
+import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import java.util.*
 import kotlin.properties.Delegates
 
 class UserDexAdapter : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
-    private val dataset: MutableList<UserDexPokemon> = mutableListOf()
+    var searchText: String by Delegates.observable("") { _, _, new ->
+        filter(new)
+    }
+
+    private var dataset: MutableList<UserDexPokemon> = mutableListOf()
+    private var originalDataset: List<UserDexPokemon> = emptyList()
 
     fun add(userDex: List<UserDexPokemon>) {
         dataset.addAll(userDex)
+        originalDataset = userDex
         notifyDataSetChanged()
     }
 
@@ -26,11 +33,29 @@ class UserDexAdapter : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val p = dataset[position]
         holder.name = p.name
-        holder.number = position + 1
+        holder.number = p.dexNumber
         holder.caught = p.caught
     }
 
     override fun getItemCount(): Int = dataset.size
+
+    private fun filter(search: String) {
+        dataset = if (search == "") {
+            originalDataset.toMutableList()
+        } else {
+            originalDataset.filter {
+                it.name
+                    .toLowerCase(Locale.getDefault())
+                    .contains(
+                        search.toLowerCase(Locale.getDefault())
+                    ) || it.dexNumber.toString()
+                    .toLowerCase(Locale.getDefault())
+                    .startsWith(search.toLowerCase(Locale.getDefault()))
+            }
+                .toMutableList()
+        }
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
@@ -46,6 +71,9 @@ class UserDexAdapter : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
 
         var caught: Boolean by Delegates.observable(false) { _, _, new ->
             setBackground(new)
+            originalDataset = originalDataset.mapIf({ it.dexNumber == this.number }) {
+                it.copy(caught = new)
+            }
         }
 
         init {
