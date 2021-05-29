@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,9 +37,23 @@ class MyDexFragment : Fragment() {
                     PokedexFragment.newInstance(
                         userId = userId,
                         dexId = dexId,
-                    )
+                    ),
                 )
             }
+
+            it.findViewById<SearchView>(R.id.my_dex_search_bar)
+                .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        myDexAdapter.searchText = query ?: ""
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        myDexAdapter.searchText = newText ?: ""
+                        return true
+                    }
+                })
+
             recyclerView.adapter = myDexAdapter
 
             val layoutManager = GridLayoutManager(context, 1)

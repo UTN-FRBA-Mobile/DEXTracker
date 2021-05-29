@@ -15,9 +15,14 @@ import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import kotlin.properties.Delegates
 
 class MyDexAdapter(
-    private val dex: List<PokedexRef>,
+    private var dex: List<PokedexRef>,
     private val onClick: (String, String) -> Unit,
 ) : RecyclerView.Adapter<MyDexAdapter.ViewHolder>() {
+    private val originalDex = dex
+    var searchText: String by Delegates.observable("") { _, _, new ->
+        filter(new)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.my_dex_card, parent, false)
     )
@@ -31,6 +36,15 @@ class MyDexAdapter(
     }
 
     override fun getItemCount(): Int = dex.size
+
+    private fun filter(search: String) {
+        dex = if (search == "") {
+            originalDex
+        } else {
+            originalDex.filter { it.game.displayName.startsWith(search) }
+        }
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val cardView: CardView = itemView.findViewById(R.id.my_dex_card)
@@ -61,6 +75,8 @@ class MyDexAdapter(
             }
         }
     }
+
+    private fun shouldRender(t: String) = searchText == "" || t.startsWith(searchText)
 
     companion object {
         private const val TAG = "MY_DEX"
