@@ -23,3 +23,13 @@ data class UserDexPokemon(
     val dexNumber: Int,
     val caught: Boolean,
 )
+
+data class UpdateUserDTO(
+    val username: String? = null,
+    val dex: Map<String, DexUpdateDTO>? = null,
+)
+
+data class DexUpdateDTO(
+    val name: String? = null,
+    val caught: List<Int>
+)

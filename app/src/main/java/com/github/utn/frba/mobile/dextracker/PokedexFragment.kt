@@ -11,8 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.UserDexAdapter
+import com.github.utn.frba.mobile.dextracker.data.DexUpdateDTO
+import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
+import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
+import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,10 +36,10 @@ class PokedexFragment : Fragment() {
     private lateinit var userDex: UserDex
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
-        if (new) {
-            searchView.visibility = View.GONE
+        searchView.visibility = if (new) {
+            View.GONE
         } else {
-            searchView.visibility = View.VISIBLE
+            View.VISIBLE
         }
     }
 
@@ -92,6 +96,41 @@ class PokedexFragment : Fragment() {
 
             fetchPokedex()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val callResponse = dexTrackerService.updateUser(
+            userId = this.userId,
+            updateUser = UpdateUserDTO(
+                username = null,
+                dex = mapOf(dexId to DexUpdateDTO(
+                    name = null,
+                    caught = userDexAdapter.fullDataset.filter { it.caught }
+                        .map { it.dexNumber }
+                ))
+            ),
+            token = InMemoryRepository.session.dexToken,
+        )
+
+        val updatedDex = userDex.copy(
+            caught = userDexAdapter.fullDataset.count { it.caught },
+            pokemon = userDexAdapter.fullDataset,
+        )
+
+        InMemoryRepository.merge(dexId = dexId, dex = updatedDex)
+
+        callResponse.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (!response.isSuccessful) {
+                    Log.w(TAG, "onono fallo actualizar el user doggo")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "ononon se rompió algo perro", t)
+            }
+        })
     }
 
     private fun fetchPokedex() {

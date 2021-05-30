@@ -21,12 +21,12 @@ class UserDexAdapter(
     }
 
     private var dataset: MutableList<UserDexPokemon> = mutableListOf()
-    private var originalDataset: List<UserDexPokemon> = emptyList()
+    var fullDataset: List<UserDexPokemon> = emptyList()
     var isEditing: Boolean = false
 
     fun add(userDex: List<UserDexPokemon>) {
         dataset.addAll(userDex)
-        originalDataset = userDex
+        fullDataset = userDex
         notifyDataSetChanged()
     }
 
@@ -45,9 +45,9 @@ class UserDexAdapter(
 
     private fun filter(search: String) {
         dataset = if (search == "") {
-            originalDataset.toMutableList()
+            fullDataset.toMutableList()
         } else {
-            originalDataset.filter {
+            fullDataset.filter {
                 it.name
                     .toLowerCase(Locale.getDefault())
                     .contains(
@@ -75,7 +75,7 @@ class UserDexAdapter(
 
         var caught: Boolean by Delegates.observable(false) { _, _, new ->
             setBackground(new)
-            originalDataset = originalDataset.mapIf({ it.dexNumber == this.number }) {
+            fullDataset = fullDataset.mapIf({ it.dexNumber == this.number }) {
                 it.copy(caught = new)
             }
         }

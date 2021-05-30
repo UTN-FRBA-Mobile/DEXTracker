@@ -1,6 +1,7 @@
 package com.github.utn.frba.mobile.dextracker.service
 
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
+import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import retrofit2.Call
@@ -33,4 +34,11 @@ interface DexTrackerService {
     fun validate(
         @Header("dex-token") token: String,
     ): Call<Unit>
+
+    @PATCH("users/{user_id}")
+    fun updateUser(
+        @Path("user_id") userId: String,
+        @Header("dex-token") token: String,
+        @Body updateUser: UpdateUserDTO,
+    ): Call<User>
 }
