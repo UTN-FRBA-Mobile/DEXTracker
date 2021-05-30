@@ -18,17 +18,13 @@ class MyDexFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var myDexAdapter: MyDexAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        session = InMemoryRepository.session
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        session = InMemoryRepository.session
         return inflater.inflate(R.layout.fragment_my_dex, container, false).also {
             recyclerView = it.findViewById(R.id.my_dex_recycler_view)
             myDexAdapter = MyDexAdapter(session.pokedex) { dexId, userId ->
