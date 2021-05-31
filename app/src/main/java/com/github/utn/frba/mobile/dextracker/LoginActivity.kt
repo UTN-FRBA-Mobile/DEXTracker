@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
+import com.github.utn.frba.mobile.dextracker.constants.RC_SIGN_IN
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
@@ -142,7 +143,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val RC_SIGN_IN = 1
         private const val TAG = "LOGIN"
     }
 }
