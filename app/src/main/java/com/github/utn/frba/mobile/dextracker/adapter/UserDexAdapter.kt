@@ -13,6 +13,7 @@ import java.util.*
 import kotlin.properties.Delegates
 
 class UserDexAdapter(
+    private val canEdit: Boolean,
     private val openEditor: () -> Unit,
     private val openPokemonInfo: (String) -> Unit,
 ) : RecyclerView.Adapter<UserDexAdapter.ViewHolder>() {
@@ -83,12 +84,14 @@ class UserDexAdapter(
         init {
             imageView.setImageResource(R.drawable.placeholder)
             itemView.setOnLongClickListener {
-                openEditor()
-                caught = !caught
+                if (canEdit) {
+                    openEditor()
+                    caught = !caught
+                }
                 true
             }
             itemView.setOnClickListener {
-                if (isEditing) caught = !caught
+                if (isEditing && canEdit) caught = !caught
                 else openPokemonInfo(this.name)
             }
         }
