@@ -26,7 +26,7 @@ import kotlin.properties.Delegates
 private const val USER_ID = "userId"
 private const val DEX_ID = "dexId"
 
-class PokedexFragment : Fragment() {
+class PokedexFragment private constructor(): Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var userDexAdapter: UserDexAdapter
     private lateinit var userId: String
