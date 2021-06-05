@@ -62,7 +62,13 @@ class MainActivity : AppCompatActivity() {
         //SOLO PARA TESTING
         //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
         ////////////////////////////////////////////////////////
-        makeCurrentFragment(myDexFragment)
+//        makeCurrentFragment(myDexFragment)
+        makeCurrentFragment(DexDiffFragment.newInstance(
+            leftUserId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4",
+            leftUserDexId = "UD-2021-06-05-2ff23c99-7811-4e4a-a127-ebb4ab599af0",
+            rightUserId = "U-2021-04-18-36d52c56-4cbd-4e81-9885-80e095990bf8",
+            rightUserDexId = "UD-2021-04-18-a7263e1a-e894-4ffc-8a78-711ac7140e65"
+        ))
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.perfil -> makeCurrentFragment(perfilFragment)
