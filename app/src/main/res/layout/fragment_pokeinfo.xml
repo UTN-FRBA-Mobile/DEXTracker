@@ -5,9 +5,10 @@
     android:orientation="vertical"
     android:theme="@style/Theme.DexTracker.PokeInfo">
     <ImageView
+        android:background="@drawable/circle_white_background"
         android:id="@+id/pokeimage"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+        android:layout_width="96dp"
+        android:layout_height="96dp" />
     <TextView
         android:fontFamily="@font/pokemon_solid"
         android:textSize="30sp"

@@ -1,5 +1,7 @@
 package com.github.utn.frba.mobile.dextracker.data
 
+import android.os.Parcelable
+
 enum class PokedexType {
     NATIONAL,
     REGIONAL,

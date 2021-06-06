@@ -13,10 +13,11 @@
         android:textSize="20sp"
         android:layout_margin="@dimen/text_margin" />
     <ImageView
-        android:id="@+id/pokeimage"
+        android:background="@drawable/circle_white_background"
+        android:id="@+id/pokemon_evolution_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:visibility="gone"/><!--CAMBIAR SI LE AGREGAMOS IMAGEN-->
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeevoname"
         android:layout_width="wrap_content"

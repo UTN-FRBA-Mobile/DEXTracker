@@ -1,19 +1,17 @@
 package com.github.utn.frba.mobile.dextracker.service
 
-import com.github.utn.frba.mobile.dextracker.data.LoginRequest
-import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
-import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.UserDex
+import com.github.utn.frba.mobile.dextracker.data.*
+import com.github.utn.frba.mobile.dextracker.utils.objectMapper
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.*
 
 private const val host = "https://dex-tracker.herokuapp.com"
 
 private val dexTrackerClient: Retrofit = Retrofit.Builder()
     .baseUrl("$host/api/v1/")
-    .addConverterFactory(GsonConverterFactory.create())
+    .addConverterFactory(JacksonConverterFactory.create(objectMapper))
     .build()
 
 val dexTrackerService: DexTrackerService = dexTrackerClient.create(DexTrackerService::class.java)
@@ -33,7 +31,7 @@ interface DexTrackerService {
     @POST("token")
     fun validate(
         @Header("dex-token") token: String,
-    ): Call<Unit>
+    ): Call<User>
 
     @PATCH("users/{user_id}")
     fun updateUser(
@@ -41,4 +39,10 @@ interface DexTrackerService {
         @Header("dex-token") token: String,
         @Body updateUser: UpdateUserDTO,
     ): Call<User>
+
+    @GET("games/{game}/pokemon/{pokemon}")
+    fun fetchPokemon(
+        @Path("game") game: String,
+        @Path("pokemon") pokemon: String,
+    ): Call<Pokemon>
 }
