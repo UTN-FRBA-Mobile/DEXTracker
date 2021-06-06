@@ -65,11 +65,9 @@ class PokedexFragment : Fragment() {
                 openPokemonInfo = { p ->
                     replaceWith(
                         resourceId = R.id.fl_wrapper,
-                        other = InfoPokeFragment.newInstance(
-                            "param1",
-                            "param2",
-                            userDex.game.name,
-                            p,
+                        other = PokemonInfoFragment.newInstance(
+                            game = userDex.game,
+                            pokemon = p,
                         ),
                     )
                 }

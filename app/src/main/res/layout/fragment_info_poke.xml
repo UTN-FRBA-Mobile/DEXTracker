@@ -4,36 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_degrade_2"
-    tools:context=".InfoPokeFragment">
+    android:padding="32dp"
+    tools:context=".PokemonInfoFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_pokeinfo"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerviewevo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_poke_evolution"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerview"/>
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerviewforms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_poke_form"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerviewevo"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/navbar_margin"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerviewforms"/>
+            app:layout_constraintTop_toBottomOf="@+id/forms_recycler_view" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/evolution_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_recycler_view"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_poke_evolution" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forms_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/evolution_recycler_view"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_poke_form" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/info_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_pokeinfo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

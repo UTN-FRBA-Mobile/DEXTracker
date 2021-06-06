@@ -1,4 +1,4 @@
-package com.github.utn.frba.mobile.dextracker
+package com.github.utn.frba.mobile.dextracker.data
 
 enum class Type {
     BUG,
