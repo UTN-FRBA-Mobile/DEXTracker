@@ -10,6 +10,17 @@
     android:paddingEnd="16dp"
     tools:context="com.github.utn.frba.mobile.dextracker.PokedexFragment">
 
+    <Button
+        android:background="@color/gray"
+        android:textColor="@color/black"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/compare_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pokedex_toolbar"
+        android:text="@string/compare"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/pokedex_spinner"
         style="?android:attr/progressBarStyleLarge"
@@ -37,12 +48,11 @@
             app:queryHint="Buscar PokeDex" />
     </Toolbar>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pokedex_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/pokedex_toolbar"
+        android:layout_below="@+id/compare_button"
         android:layout_marginTop="16dp" />
 
 </RelativeLayout>

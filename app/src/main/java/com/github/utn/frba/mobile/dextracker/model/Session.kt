@@ -20,6 +20,7 @@ data class PokedexRef(
     val id: String,
     val caught: Int,
     val total: Int,
+    val name: String?,
     val game: Game,
 ) {
     constructor(pokedex: UserDex) : this(
@@ -27,5 +28,6 @@ data class PokedexRef(
         game = pokedex.game,
         caught = pokedex.caught,
         total = pokedex.pokemon.size,
+        name = pokedex.name,
     )
 }

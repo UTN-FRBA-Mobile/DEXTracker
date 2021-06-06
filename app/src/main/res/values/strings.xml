@@ -23,4 +23,5 @@
     <string name="title_activity_pokedex">PokedexActivity</string>
     <string name="pokemon_icon">pokemon_icon</string>
     <string name="_0_0">386/386</string>
+    <string name="compare">Comparar</string>
 </resources>

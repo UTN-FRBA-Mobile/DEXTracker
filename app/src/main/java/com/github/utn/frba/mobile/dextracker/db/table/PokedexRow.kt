@@ -12,4 +12,5 @@ data class PokedexRow(
     val caught: Int,
     val total: Int,
     @Embedded val game: Game,
+    val dexName: String? = null,
 )

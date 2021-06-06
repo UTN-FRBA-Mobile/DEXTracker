@@ -103,7 +103,7 @@ class UserDexAdapter(
         }
 
         private fun setBackground(caught: Boolean) {
-            itemView.setBackgroundResource(if (caught) R.color.green else R.color.light_gray)
+            itemView.setBackgroundResource(if (caught) R.color.green else R.color.white)
         }
     }
 }

@@ -16,10 +16,12 @@ val db: Memoized<Context, AppDatabase> = memo {
         it,
         AppDatabase::class.java,
         "dex-tracker"
-    ).build()
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 }
 
-@Database(entities = [SessionRow::class, PokedexRow::class], version = 1)
+@Database(entities = [SessionRow::class, PokedexRow::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun sessionDao(): SessionDAO
 

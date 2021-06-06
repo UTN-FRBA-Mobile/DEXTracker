@@ -3,8 +3,11 @@ package com.github.utn.frba.mobile.dextracker
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -26,7 +29,7 @@ import kotlin.properties.Delegates
 private const val USER_ID = "userId"
 private const val DEX_ID = "dexId"
 
-class PokedexFragment private constructor(): Fragment() {
+class PokedexFragment private constructor() : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var userDexAdapter: UserDexAdapter
     private lateinit var userId: String
@@ -58,9 +61,11 @@ class PokedexFragment private constructor(): Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
+            val ownsDex = InMemoryRepository.session.userId == userId
+
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
             userDexAdapter = UserDexAdapter(
-                canEdit = InMemoryRepository.session.userId == userId,
+                canEdit = ownsDex,
                 openEditor = { isEditing = true },
                 openPokemonInfo = { p ->
                     replaceWith(
@@ -91,6 +96,41 @@ class PokedexFragment private constructor(): Fragment() {
                         return true
                     }
                 })
+            }
+
+            val compareButton: Button = it.findViewById(R.id.compare_button)
+
+            val comparableDexes = InMemoryRepository.session.pokedex
+                .filter { dex -> dex.game.gen == userDex.game.gen }
+            if (!ownsDex && comparableDexes.isNotEmpty()) compareButton.apply {
+                visibility = View.VISIBLE
+                setOnClickListener { _ ->
+                    val popup = PopupMenu(this.context, it)
+                    popup.inflate(R.menu.menu_compare)
+                    popup.apply {
+                        menu.clear()
+
+                        comparableDexes.forEachIndexed { i, dex ->
+                            menu.add(Menu.NONE, i, i, dex.name ?: dex.game.displayName)
+                        }
+
+                        setOnMenuItemClickListener { i ->
+                            val dex = comparableDexes[i.itemId]
+                            replaceWith(
+                                resourceId = R.id.fl_wrapper,
+                                other = DexDiffFragment.newInstance(
+                                    leftUserId = InMemoryRepository.session.userId,
+                                    leftUserDexId = dex.id,
+                                    rightUserId = userId,
+                                    rightUserDexId = dexId,
+                                ),
+                            )
+                            true
+                        }
+
+                        show()
+                    }
+                }
             }
 
             fetchPokedex()

@@ -22,6 +22,7 @@ class SessionStorage(context: Context) {
                     caught = it.caught,
                     total = it.total,
                     game = it.game,
+                    name = it.dexName,
                 )
             },
         )
