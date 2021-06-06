@@ -31,7 +31,7 @@ interface DexTrackerService {
     @POST("token")
     fun validate(
         @Header("dex-token") token: String,
-    ): Call<Unit>
+    ): Call<User>
 
     @PATCH("users/{user_id}")
     fun updateUser(

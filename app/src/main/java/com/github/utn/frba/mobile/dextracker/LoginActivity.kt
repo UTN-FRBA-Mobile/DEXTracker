@@ -10,6 +10,7 @@ import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
+import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
@@ -78,9 +79,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateStoredSession(session: Session) {
         dexTrackerService.validate(token = session.dexToken)
-            .enqueue(object : Callback<Unit> {
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    if (response.isSuccessful) redirectToMain(session)
+            .enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful) redirectToMain(
+                        session.copy(pokedex = response.body()!!.pokedex.map { PokedexRef(it) })
+                    )
                     else {
                         Log.w(
                             TAG,
@@ -90,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(TAG, "ononono se rompió la verificación del token perrito", t)
                 }
             })
@@ -137,6 +140,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun redirectToMain(session: Session) {
         InMemoryRepository.session = session
+        AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(intent)
