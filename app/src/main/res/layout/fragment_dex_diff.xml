@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dex_diff_text"
+        android:layout_below="@id/dex_diff_text"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -44,6 +44,8 @@
         android:id="@+id/dex_diff_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="asdasd" />
+        android:gravity="center"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
 
 </RelativeLayout>

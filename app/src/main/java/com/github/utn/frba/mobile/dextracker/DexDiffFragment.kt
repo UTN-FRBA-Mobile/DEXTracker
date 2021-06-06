@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,14 +69,16 @@ class DexDiffFragment private constructor() : Fragment() {
             leftRecyclerView = it.findViewById(R.id.dex_diff_left_recycler_view)
             leftDiffAdapter = DexDiffAdapter()
             leftRecyclerView.adapter = leftDiffAdapter
-            setLayoutManager(leftRecyclerView)
+            leftRecyclerView.setLayoutManager()
 
             rightRecyclerView = it.findViewById(R.id.dex_diff_right_recycler_view)
             rightDiffAdapter = DexDiffAdapter()
             rightRecyclerView.adapter = rightDiffAdapter
-            setLayoutManager(rightRecyclerView)
+            rightRecyclerView.setLayoutManager()
 
-            it.findViewById<ProgressBar>(R.id.dex_diff_spinner).visibility = View.GONE
+            it.findViewById<ProgressBar>(R.id.dex_diff_spinner).apply {
+                visibility = View.GONE
+            }
         }
     }
 
@@ -91,6 +94,9 @@ class DexDiffFragment private constructor() : Fragment() {
                         ?.let {
                             Log.i(TAG, "Loading $userId")
                             assign(it)
+                            view!!.findViewById<TextView>(R.id.dex_diff_text).apply {
+                                text = it.game.displayName
+                            }
                         }
                         ?: run {
                             Log.e(
@@ -128,8 +134,8 @@ class DexDiffFragment private constructor() : Fragment() {
         private const val TAG = "DEX_DIFF"
     }
 
-    fun setLayoutManager(recyclerView: RecyclerView) {
+    private fun RecyclerView.setLayoutManager() {
         val layoutManager = GridLayoutManager(context, 1)
-        recyclerView.layoutManager = layoutManager
+        this.layoutManager = layoutManager
     }
 }

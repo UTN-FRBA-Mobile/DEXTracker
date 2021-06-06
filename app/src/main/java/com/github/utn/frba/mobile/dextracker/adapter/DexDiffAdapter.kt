@@ -36,9 +36,22 @@ class DexDiffAdapter : RecyclerView.Adapter<DexDiffAdapter.ViewHolder>() {
 
         fun setPokemon(p: UserDexPokemon) {
             imageView.setImageResource(R.drawable.placeholder)
-            itemView.setBackgroundResource(if (p.caught) R.color.green else R.color.white)
-            numberView.text = pad(p.dexNumber)
-            nameView.text = p.name.capitalize(Locale.getDefault())
+            itemView.setBackgroundResource(if (p.caught) R.color.green else R.color.background_disabled)
+            numberView.apply {
+                text = pad(p.dexNumber)
+                if (!p.caught) disabled()
+            }
+
+            nameView.apply {
+                text = p.name.capitalize(Locale.getDefault())
+                if (!p.caught) disabled()
+            }
+
+            if (!p.caught) imageView.alpha = 0.5f
+        }
+
+        private fun TextView.disabled() {
+            setTextColor(resources.getColor(R.color.text_disabled))
         }
     }
 
