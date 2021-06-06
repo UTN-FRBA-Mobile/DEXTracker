@@ -27,8 +27,7 @@
         <activity
             android:name=".LoginActivity"
             android:noHistory="true"
-            android:label="@string/title_activity_pokedex"
-            android:theme="@style/Theme.DexTracker.NoActionBar.NoActionBar">
+            android:theme="@style/Theme.DexTracker.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
