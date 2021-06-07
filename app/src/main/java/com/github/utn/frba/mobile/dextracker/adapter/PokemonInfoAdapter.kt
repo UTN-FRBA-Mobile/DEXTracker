@@ -1,20 +1,21 @@
 package com.github.utn.frba.mobile.dextracker.adapter
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.Game
 import com.github.utn.frba.mobile.dextracker.data.Pokemon
-import com.squareup.picasso.Picasso
 
 class PokemonInfoAdapter(
     private val pokemon: Pokemon,
     private val game: Game,
+    private val context: Context,
 ) : RecyclerView.Adapter<PokemonInfoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -44,9 +45,9 @@ class PokemonInfoAdapter(
         holder.itemView.findViewById<TextView>(R.id.pokegen).text =
             "Generation: ${pokemon.gen}"
 
-        Picasso.get()
+        Glide.with(context)
             .load(Uri.parse(url))
-            .into(holder.itemView.findViewById<ImageView>(R.id.pokeimage))
+            .into(holder.itemView.findViewById(R.id.pokeimage))
     }
 
     override fun getItemCount(): Int = 1

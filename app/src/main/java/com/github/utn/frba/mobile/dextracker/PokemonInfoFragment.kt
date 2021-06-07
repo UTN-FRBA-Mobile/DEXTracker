@@ -62,6 +62,7 @@ class PokemonInfoFragment private constructor() : Fragment() {
                         infoAdapter = PokemonInfoAdapter(
                             pokemon = response.body()!!,
                             game = game,
+                            context = context!!,
                         )
 
                         with(infoRecyclerView) {
