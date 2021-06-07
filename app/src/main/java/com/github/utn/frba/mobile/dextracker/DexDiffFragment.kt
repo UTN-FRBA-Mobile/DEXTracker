@@ -1,21 +1,18 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.DexDiffAdapter
+import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.putStrings
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 private const val LEFT_USER_ID = "leftUserId"
@@ -34,29 +31,33 @@ class DexDiffFragment private constructor() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val leftUserId = it.getString(LEFT_USER_ID)!!
-            val leftUserDexId = it.getString(LEFT_USER_DEX_ID)!!
 
-            fetch(
-                userId = leftUserId,
-                dexId = leftUserDexId,
-                assign = { dex ->
-                    leftDex = dex
-                    leftDiffAdapter.setDataset(dex.pokemon)
-                },
-            )
+            AsyncCoroutineExecutor.dispatch {
+                val leftUserId = it.getString(LEFT_USER_ID)!!
+                val leftUserDexId = it.getString(LEFT_USER_DEX_ID)!!
+                val rightUserId = it.getString(RIGHT_USER_ID)!!
+                val rightUserDexId = it.getString(RIGHT_USER_DEX_ID)!!
 
-            val rightUserId = it.getString(RIGHT_USER_ID)!!
-            val rightUserDexId = it.getString(RIGHT_USER_DEX_ID)!!
+                AsyncCoroutineExecutor.parallel(
+                    { fetch(userId = leftUserId, dexId = leftUserDexId) },
+                    { fetch(userId = rightUserId, dexId = rightUserDexId) },
+                )
+                    .takeIf { it.all { res -> res.isSuccessful && res.body() != null } }
+                    ?.map { it.body()!! }
+                    ?.let { (left, right) ->
+                        requireView().let {
+                            it.findViewById<TextView>(R.id.dex_diff_text).apply {
+                                text = left.game.displayName
+                            }
 
-            fetch(
-                userId = rightUserId,
-                dexId = rightUserDexId,
-                assign = { dex ->
-                    rightDex = dex
-                    rightDiffAdapter.setDataset(dex.pokemon)
-                },
-            )
+                            leftDex = left
+                            leftDiffAdapter.setDataset(left.pokemon)
+
+                            rightDex = right
+                            rightDiffAdapter.setDataset(right.pokemon)
+                        }
+                    }
+            }
         }
     }
 
@@ -75,42 +76,15 @@ class DexDiffFragment private constructor() : Fragment() {
             rightDiffAdapter = DexDiffAdapter()
             rightRecyclerView.adapter = rightDiffAdapter
             rightRecyclerView.setLayoutManager()
-
-            it.findViewById<ProgressBar>(R.id.dex_diff_spinner).apply {
-                visibility = View.GONE
-            }
         }
     }
 
-    private fun fetch(userId: String, dexId: String, assign: (UserDex) -> Unit) {
+    private fun fetch(userId: String, dexId: String): Response<UserDex> =
         dexTrackerService.fetchUserDex(
             userId = userId,
             dexId = dexId,
         )
-            .enqueue(object : Callback<UserDex> {
-                override fun onResponse(call: Call<UserDex>, response: Response<UserDex>) {
-                    response.takeIf { it.isSuccessful }
-                        ?.body()
-                        ?.let {
-                            Log.i(TAG, "Loading $userId")
-                            assign(it)
-                            view!!.findViewById<TextView>(R.id.dex_diff_text).apply {
-                                text = it.game.displayName
-                            }
-                        }
-                        ?: run {
-                            Log.e(
-                                TAG,
-                                "ononon se rompió algo perro: ${response.code()}, ${response.body()}"
-                            )
-                        }
-                }
-
-                override fun onFailure(call: Call<UserDex>, t: Throwable) {
-                    Log.e(TAG, "ononno se rompió la api perro", t)
-                }
-            })
-    }
+            .execute()
 
     companion object {
         @JvmStatic
