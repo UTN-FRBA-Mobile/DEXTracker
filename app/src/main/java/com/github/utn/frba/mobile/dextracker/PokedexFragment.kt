@@ -37,6 +37,8 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var spinner: ProgressBar
     private lateinit var searchView: SearchView
     private lateinit var userDex: UserDex
+    private lateinit var compareButton: Button
+    private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
         searchView.visibility = if (new) {
@@ -51,6 +53,7 @@ class PokedexFragment private constructor() : Fragment() {
         arguments?.let {
             userId = it.getString(USER_ID)!!
             dexId = it.getString(DEX_ID)!!
+            ownsDex = InMemoryRepository.session.userId == userId
         }
     }
 
@@ -61,8 +64,6 @@ class PokedexFragment private constructor() : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
-            val ownsDex = InMemoryRepository.session.userId == userId
-
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
             userDexAdapter = UserDexAdapter(
                 canEdit = ownsDex,
@@ -98,40 +99,7 @@ class PokedexFragment private constructor() : Fragment() {
                 })
             }
 
-            val compareButton: Button = it.findViewById(R.id.compare_button)
-
-            val comparableDexes = InMemoryRepository.session.pokedex
-                .filter { dex -> dex.game.gen == userDex.game.gen }
-            if (!ownsDex && comparableDexes.isNotEmpty()) compareButton.apply {
-                visibility = View.VISIBLE
-                setOnClickListener { _ ->
-                    val popup = PopupMenu(this.context, it)
-                    popup.inflate(R.menu.menu_compare)
-                    popup.apply {
-                        menu.clear()
-
-                        comparableDexes.forEachIndexed { i, dex ->
-                            menu.add(Menu.NONE, i, i, dex.name ?: dex.game.displayName)
-                        }
-
-                        setOnMenuItemClickListener { i ->
-                            val dex = comparableDexes[i.itemId]
-                            replaceWith(
-                                resourceId = R.id.fl_wrapper,
-                                other = DexDiffFragment.newInstance(
-                                    leftUserId = InMemoryRepository.session.userId,
-                                    leftUserDexId = dex.id,
-                                    rightUserId = userId,
-                                    rightUserDexId = dexId,
-                                ),
-                            )
-                            true
-                        }
-
-                        show()
-                    }
-                }
-            }
+            compareButton = it.findViewById(R.id.compare_button)
 
             fetchPokedex()
         }
@@ -180,9 +148,10 @@ class PokedexFragment private constructor() : Fragment() {
                 spinner.visibility = View.GONE
                 response.takeIf { it.isSuccessful }
                     ?.body()
-                    ?.run {
-                        userDex = this
-                        userDexAdapter.add(this.pokemon)
+                    ?.let {
+                        userDex = it
+                        userDexAdapter.add(it.pokemon)
+                        initializeCompareButton(it)
                     }
                     ?: Log.e(
                         TAG,
@@ -194,6 +163,41 @@ class PokedexFragment private constructor() : Fragment() {
                 Log.e(TAG, "ononon se rompió algo perro", t)
             }
         })
+    }
+
+    private fun initializeCompareButton(userDex: UserDex) {
+        val comparableDexes = InMemoryRepository.session.pokedex
+            .filter { dex -> dex.game.gen == userDex.game.gen }
+        if (!ownsDex && comparableDexes.isNotEmpty()) compareButton.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                val popup = PopupMenu(this.context, it)
+                popup.inflate(R.menu.menu_compare)
+                popup.apply {
+                    menu.clear()
+
+                    comparableDexes.forEachIndexed { i, dex ->
+                        menu.add(Menu.NONE, i, i, dex.name ?: dex.game.displayName)
+                    }
+
+                    setOnMenuItemClickListener { i ->
+                        val dex = comparableDexes[i.itemId]
+                        replaceWith(
+                            resourceId = R.id.fl_wrapper,
+                            other = DexDiffFragment.newInstance(
+                                leftUserId = InMemoryRepository.session.userId,
+                                leftUserDexId = dex.id,
+                                rightUserId = userId,
+                                rightUserDexId = dexId,
+                            ),
+                        )
+                        true
+                    }
+
+                    show()
+                }
+            }
+        }
     }
 
     companion object {
