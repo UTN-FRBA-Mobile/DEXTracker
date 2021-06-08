@@ -53,7 +53,7 @@
         app:fabCradleMargin="20dp"
         app:fabCradleVerticalOffset="10dp"
         app:fabCradleRoundedCornerRadius="20dp"
-        android:backgroundTint="@color/teal_700">
+        android:backgroundTint="@color/status_nav_bar">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

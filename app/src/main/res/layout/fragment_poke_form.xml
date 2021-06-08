@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_gravity="center"
     android:theme="@style/Theme.DexTracker.PokeInfoEvoForm">
     <TextView
         android:id="@+id/pokeforms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Form: "
-        android:textColor="@color/white"
+        android:textColor="@color/title_light_1"
         android:textSize="20sp"
         android:layout_margin="@dimen/text_margin" />
     <ImageView
         android:id="@+id/pokeimage"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:visibility="gone"/> <!--CAMBIAR SI LE AGREGAMOS IMAGEN-->
+        android:background="@drawable/circle_white_background"
+        android:visibility="gone" />
     <TextView
         android:id="@+id/pokeformname"
         android:layout_width="wrap_content"

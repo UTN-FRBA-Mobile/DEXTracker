@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp"
+    android:padding="16dp"
+    android:background="@drawable/fondo_degrade_2"
     tools:context=".PokemonInfoFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,22 +19,21 @@
             app:layout_constraintTop_toBottomOf="@+id/forms_recycler_view" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forms_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/evolution_recycler_view"
+            tools:listitem="@layout/fragment_poke_form" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/evolution_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_recycler_view"
-            tools:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/fragment_poke_evolution" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/forms_recycler_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/evolution_recycler_view"
-            tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_poke_form" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/info_recycler_view"
@@ -40,8 +41,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/fragment_pokeinfo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

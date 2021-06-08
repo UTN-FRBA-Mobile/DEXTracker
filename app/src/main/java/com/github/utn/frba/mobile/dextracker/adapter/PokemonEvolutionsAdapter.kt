@@ -1,5 +1,6 @@
 package com.github.utn.frba.mobile.dextracker.adapter
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.*
-import com.squareup.picasso.Picasso
 
 class PokemonEvolutionsAdapter(
     private val game: Game,
     private val pokemon: Pokemon,
+    private val context: Context,
 ) : RecyclerView.Adapter<PokemonEvolutionsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,10 +26,10 @@ class PokemonEvolutionsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val evolution = pokemon.evolutions[position]
-
         val gameKey = game.name.takeWhile { it != '-' }
 
-        holder.itemView.findViewById<TextView>(R.id.pokeevoname).text = evolution.name
+        holder.itemView.findViewById<TextView>(R.id.pokeevoname).text =
+            evolution.name
         holder.itemView.findViewById<TextView>(R.id.pokeevotype).text =
             "type: ${evolution.method.type}"
         when (val method = evolution.method) {
@@ -35,65 +37,53 @@ class PokemonEvolutionsAdapter(
             is UseItem -> itemEvolution(holder, method)
             is Trade -> tradeEvolution(method, holder)
         }
-
-        val url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${evolution.name}.png"
+        val url = "https://dex-tracker.herokuapp.com/sprites/bw/${evolution.name}.gif"
         val item = holder.itemView.findViewById<ImageView>(R.id.pokemon_evolution_image)
         item.visibility = View.VISIBLE
-        Picasso.get()
+        Glide.with(context)
             .load(Uri.parse(url))
             .into(item)
     }
 
+    private fun fillText(item: TextView, text: String){
+        item.text = text
+        item.visibility = View.VISIBLE
+    }
+
     private fun levelUpEvolution(method: LevelUp, holder: ViewHolder) {
-        if (method.level != null) holder.itemView.findViewById<TextView>(R.id.pokelevel).text =
-            "level: ${method.level}"
-        else holder.itemView.findViewById<TextView>(R.id.pokelevel).visibility = View.GONE
-        if (method.friendship != null) holder.itemView.findViewById<TextView>(R.id.pokefriendship).text =
-            "friendship: ${method.friendship}"
-        else holder.itemView.findViewById<TextView>(R.id.pokefriendship).visibility =
-            View.GONE
-        if (method.move != null) holder.itemView.findViewById<TextView>(R.id.pokemove).text =
-            "move: ${method.move}"
-        else holder.itemView.findViewById<TextView>(R.id.pokemove).visibility = View.GONE
-        if (method.location != null) holder.itemView.findViewById<TextView>(R.id.pokelocation).text =
-            "location: ${method.location}"
-        else holder.itemView.findViewById<TextView>(R.id.pokelocation).visibility =
-            View.GONE
-        if (method.time != null) holder.itemView.findViewById<TextView>(R.id.poketime).text =
-            "time: ${method.time}"
-        else holder.itemView.findViewById<TextView>(R.id.poketime).visibility = View.GONE
-        if (method.item != null) holder.itemView.findViewById<TextView>(R.id.pokeitem).text =
-            "item: ${method.item}"
-        else holder.itemView.findViewById<TextView>(R.id.pokeitem).visibility = View.GONE
-        if (method.region != null) holder.itemView.findViewById<TextView>(R.id.pokeregion).text =
-            "region: ${method.region}"
-        else holder.itemView.findViewById<TextView>(R.id.pokeregion).visibility = View.GONE
-        if (method.gender != null) holder.itemView.findViewById<TextView>(R.id.pokegender).text =
-            "gender: ${method.gender}"
-        else holder.itemView.findViewById<TextView>(R.id.pokegender).visibility = View.GONE
-        if (method.upsideDown != null) holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).text =
-            "upsidedown: ${method.upsideDown}"
-        else holder.itemView.findViewById<TextView>(R.id.pokeupsidedown).visibility =
-            View.GONE
+        if (method.level != null)
+            fillText(holder.itemView.findViewById(R.id.pokelevel),"level: ${method.level}")
+        if (method.friendship != null)
+            fillText(holder.itemView.findViewById(R.id.pokefriendship),"friendship: ${method.friendship}")
+        if (method.move != null)
+            fillText(holder.itemView.findViewById(R.id.pokemove),"move: ${method.move}")
+        if (method.location != null)
+            fillText(holder.itemView.findViewById(R.id.pokelocation),"location: ${method.location}")
+        if (method.time != null)
+            fillText(holder.itemView.findViewById(R.id.poketime),"time: ${method.time}")
+        if (method.item != null)
+            fillText(holder.itemView.findViewById(R.id.pokeitem),"item: ${method.item}")
+        if (method.region != null)
+            fillText(holder.itemView.findViewById(R.id.pokeregion),"region: ${method.region}")
+        if (method.gender != null)
+            fillText(holder.itemView.findViewById(R.id.pokegender),"gender: ${method.gender}")
+        if (method.upsideDown != null)
+            fillText(holder.itemView.findViewById(R.id.pokeupsidedown),"upsidedown: ${method.upsideDown}")
     }
 
     private fun itemEvolution(holder: ViewHolder, method: UseItem) {
-        holder.itemView.findViewById<TextView>(R.id.pokeitem).text = "item: ${method.item}"
-        if (method.region != null) holder.itemView.findViewById<TextView>(R.id.pokeregion).text =
-            "region: ${method.region}"
-        else holder.itemView.findViewById<TextView>(R.id.pokeregion).visibility = View.GONE
-        if (method.gender != null) holder.itemView.findViewById<TextView>(R.id.pokegender).text =
-            "gender: ${method.gender}"
-        else holder.itemView.findViewById<TextView>(R.id.pokegender).visibility = View.GONE
+        fillText(holder.itemView.findViewById(R.id.pokeitem),"item: ${method.item}")
+        if (method.region != null)
+            fillText(holder.itemView.findViewById(R.id.pokeregion),"region: ${method.region}")
+        if (method.gender != null)
+            fillText(holder.itemView.findViewById(R.id.pokegender),"gender: ${method.gender}")
     }
 
     private fun tradeEvolution(method: Trade, holder: ViewHolder) {
-        if (method.item != null) holder.itemView.findViewById<TextView>(R.id.pokeitem).text =
-            "item: ${method.item}"
-        else holder.itemView.findViewById<TextView>(R.id.pokeitem).visibility = View.GONE
-        if (method.pokemon != null) holder.itemView.findViewById<TextView>(R.id.pokepokemon).text =
-            "pokemon: ${method.pokemon}"
-        else holder.itemView.findViewById<TextView>(R.id.pokepokemon).visibility = View.GONE
+        if (method.item != null)
+            fillText(holder.itemView.findViewById(R.id.pokeitem),"item: ${method.item}")
+        if (method.pokemon != null)
+            fillText(holder.itemView.findViewById<TextView>(R.id.pokepokemon),"pokemon: ${method.pokemon}")
     }
 
     override fun getItemCount(): Int = pokemon.evolutions.size

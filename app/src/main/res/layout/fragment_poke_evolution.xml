@@ -9,14 +9,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Evolution: "
-        android:textColor="@color/white"
+        android:textColor="@color/title_light_1"
         android:textSize="20sp"
         android:layout_margin="@dimen/text_margin" />
     <ImageView
-        android:background="@drawable/circle_white_background"
         android:id="@+id/pokemon_evolution_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
+        android:background="@drawable/circle_white_background"
         android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeevoname"
@@ -28,63 +28,73 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Method: "
-        android:textColor="@color/purple_700"
+        android:textColor="@color/title_dark_1"
         android:textSize="20sp"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"/>
     <TextView
         android:id="@+id/pokeevotype"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"/>
     <TextView
         android:id="@+id/pokelevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokefriendship"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokelocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/poketime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeitem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokegender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeupsidedown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeregion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokepokemon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
 
 </LinearLayout>

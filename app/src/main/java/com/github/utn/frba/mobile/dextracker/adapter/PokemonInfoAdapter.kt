@@ -28,9 +28,14 @@ class PokemonInfoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gameKey = game.name.takeWhile { it != '-' }
-        val url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${pokemon.name}.png"
-
-        holder.itemView.findViewById<TextView>(R.id.pokename).text = pokemon.name
+        //Me parece mejor usar gif para todos directamente
+        /*val url = if(gameKey == "bw" || gameKey == "b2w2")
+            "https://dex-tracker.herokuapp.com/sprites/bw/${pokemon.name}.gif"
+        else
+            "https://dex-tracker.herokuapp.com/sprites/$gameKey/${pokemon.name}.png"*/
+        val url = "https://dex-tracker.herokuapp.com/sprites/bw/${pokemon.name}.gif"
+        holder.itemView.findViewById<TextView>(R.id.pokename).text =
+            pokemon.name
         holder.itemView.findViewById<TextView>(R.id.pokenationalPokedexNumber).text =
             "pokedex number: ${pokemon.nationalPokedexNumber}"
         holder.itemView.findViewById<TextView>(R.id.pokeprimaryAbility).text =
@@ -41,7 +46,8 @@ class PokemonInfoAdapter(
             View.GONE
         if (pokemon.hiddenAbility != null) holder.itemView.findViewById<TextView>(R.id.pokehiddenAbility).text =
             "hidden ability: ${pokemon.hiddenAbility}"
-        else holder.itemView.findViewById<TextView>(R.id.pokehiddenAbility).visibility = View.GONE
+        else holder.itemView.findViewById<TextView>(R.id.pokehiddenAbility).visibility =
+            View.GONE
         holder.itemView.findViewById<TextView>(R.id.pokegen).text =
             "Generation: ${pokemon.gen}"
 

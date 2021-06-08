@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -21,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val GAME = "game"
-private const val POKEMON = "ppokemon"
+private const val POKEMON = "pokemon"
 
 class PokemonInfoFragment private constructor() : Fragment() {
     private lateinit var game: Game
@@ -73,6 +74,7 @@ class PokemonInfoFragment private constructor() : Fragment() {
                         evolutionAdapter = PokemonEvolutionsAdapter(
                             game = game,
                             pokemon = response.body()!!,
+                            context = context!!,
                         )
 
                         with(evolutionRecyclerView) {
@@ -80,10 +82,13 @@ class PokemonInfoFragment private constructor() : Fragment() {
                             adapter = evolutionAdapter
                         }
 
-                        formsAdapter = PokemonFormsAdapter(response.body()!!.forms)
+                        formsAdapter = PokemonFormsAdapter(
+                            pokemon = response.body()!!,
+                            context = context!!,
+                        )
 
                         with(formsRecyclerView) {
-                            layoutManager = LinearLayoutManager(context)
+                            layoutManager = GridLayoutManager(context, 3)
                             adapter = formsAdapter
                         }
                     } else
