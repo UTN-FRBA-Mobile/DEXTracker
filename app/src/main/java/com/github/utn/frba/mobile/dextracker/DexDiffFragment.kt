@@ -31,7 +31,6 @@ class DexDiffFragment private constructor() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
             AsyncCoroutineExecutor.dispatch {
                 val leftUserId = it.getString(LEFT_USER_ID)!!
                 val leftUserDexId = it.getString(LEFT_USER_DEX_ID)!!

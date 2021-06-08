@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.R
+import com.github.utn.frba.mobile.dextracker.extensions.percentageOf
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import java.util.*
@@ -32,7 +33,7 @@ class MyDexAdapter(
         val d = dex[position]
         holder.title = d.game.displayName
         holder.completion = d.caught to d.total
-        holder.completionPercentage = d.caught / d.total
+        holder.completionPercentage = d.caught percentageOf d.total
         holder.dexId = d.id
     }
 
@@ -64,9 +65,10 @@ class MyDexAdapter(
 
         var title: String by Delegates.observable("") { _, _, new -> titleView.text = new }
         var completionPercentage: Int by Delegates.observable(0) { _, _, new ->
-            completionBarView.secondaryProgress = new
+            completionBarView.progress = new
             completionPercentageView.text = "$new%"
         }
+
         var completion: Pair<Int, Int> by Delegates.observable(0 to 0) { _, _, (caught, total) ->
             completionView.text = "$caught/$total"
         }
