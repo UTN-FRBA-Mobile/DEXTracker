@@ -60,6 +60,8 @@ class PokedexFragment : Fragment() {
         return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
             userDexAdapter = UserDexAdapter(
+                //game = userDex.game,
+                game = "bw",               //HARDCODEADO-No se como conseguir la dex sin que explote
                 canEdit = InMemoryRepository.session.userId == userId,
                 openEditor = { isEditing = true },
                 openPokemonInfo = { p ->

@@ -1,9 +1,11 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.constants.RC_SIGN_IN
@@ -24,11 +26,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var sessionStorage: SessionStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_DexTracker_NoActionBar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = Color.parseColor("#EFEFEFEF")
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 

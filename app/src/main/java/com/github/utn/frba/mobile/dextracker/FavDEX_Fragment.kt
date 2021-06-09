@@ -9,13 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import com.github.utn.frba.mobile.dextracker.adapter.MyDexAdapter
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
+import com.github.utn.frba.mobile.dextracker.model.Session
+import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 
 /**
  * A fragment representing a list of Items.
  */
 class FavDEX_Fragment : Fragment() {
 
+    private lateinit var session: Session
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var favDEXAdapter: FavDEXRecyclerViewAdapter
     private var columnCount = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,16 +40,38 @@ class FavDEX_Fragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_fav_dex_list, container, false)
         //val searchView = view.findViewById<SearchView>(R.id.searchFAVDEX)
         // Set the adapter
+        session = InMemoryRepository.session
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = FavDEXRecyclerViewAdapter(DummyContent.ITEMS)
+                favDEXAdapter = FavDEXRecyclerViewAdapter(session.pokedex) { dexId, userId ->
+                    replaceWith(
+                        R.id.fl_wrapper,
+                        PokedexFragment.newInstance(
+                            userId = userId,
+                            dexId = dexId,
+                        ),
+                    )
+                }
             }
         }
-        return view
+        return view/*.also {
+            it.findViewById<androidx.appcompat.widget.SearchView>(R.id.searchFAVDEX)
+                .setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        favDEXAdapter.searchText = query ?: ""
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        favDEXAdapter.searchText = newText ?: ""
+                        return true
+                    }
+                })
+        }*/
     }
 
     companion object {
