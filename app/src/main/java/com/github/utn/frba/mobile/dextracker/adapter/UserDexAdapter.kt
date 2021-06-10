@@ -49,22 +49,19 @@ class UserDexAdapter(
         holder.name = p.name
         holder.number = p.dexNumber
         holder.caught = p.caught
+
         var gameKey = game.takeWhile { it != '-' }
         gameKey.replace("b2w2","bw").also { gameKey = it }
         gameKey.replace("dppt","dp").also { gameKey = it }
         var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
         if(gameKey == "bw")
             url.replaceAfterLast(".","gif").also { url = it }
-        /*val url = if(gameKey == "bw")
-            "https://dex-tracker.herokuapp.com/sprites/bw/${p.name}.gif"
-        else
-            "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"*/
-        //val url = "https://dex-tracker.herokuapp.com/sprites/bw/${p.name}.gif"
+
         Picasso.get()
             .load(Uri.parse(url))
             .placeholder(R.drawable.placeholder_pokeball)
             .error(R.drawable.placeholder)
-            .into(holder.itemView.findViewById(R.id.pokemon_picture), object: com.squareup.picasso.Callback {
+            .into(holder.imageView, object: com.squareup.picasso.Callback {
                 override fun onSuccess() {
                     //set animations here
                 }
@@ -95,7 +92,7 @@ class UserDexAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
+        val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
         private val nameView: TextView = itemView.findViewById(R.id.pokemon_name)
         private val numberView: TextView = itemView.findViewById(R.id.pokemon_number)
 
@@ -114,7 +111,7 @@ class UserDexAdapter(
         }
 
         init {
-            imageView.setImageResource(R.drawable.placeholder)
+            //imageView.setImageResource(R.drawable.placeholder)
             itemView.setOnLongClickListener {
                 if (canEdit) {
                     openEditor()
