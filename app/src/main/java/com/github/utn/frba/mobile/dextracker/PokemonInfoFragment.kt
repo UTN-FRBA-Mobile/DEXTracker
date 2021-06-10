@@ -1,6 +1,7 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

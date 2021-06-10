@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
@@ -115,10 +116,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commit {
+                setCustomAnimations(
+                        R.anim.fragment_open_enter,
+                        R.anim.fragment_fade_exit,
+                        R.anim.fragment_fade_enter,
+                        R.anim.fragment_open_exit,
+                )
             replace(R.id.fl_wrapper, fragment)
-            commit()
-        }
+            }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

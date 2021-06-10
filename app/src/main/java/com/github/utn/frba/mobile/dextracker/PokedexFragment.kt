@@ -15,7 +15,7 @@ import com.github.utn.frba.mobile.dextracker.data.DexUpdateDTO
 import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
-import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import retrofit2.Call
@@ -60,17 +60,19 @@ class PokedexFragment : Fragment() {
         return inflater.inflate(R.layout.pokedex_fragment, container, false).also {
             recyclerView = it.findViewById(R.id.pokedex_recycler_view)
             userDexAdapter = UserDexAdapter(
-                //game = userDex.game,
-                game = "bw",               //HARDCODEADO-No se como conseguir la dex sin que explote
                 canEdit = InMemoryRepository.session.userId == userId,
                 openEditor = { isEditing = true },
                 openPokemonInfo = { p ->
-                    replaceWith(
-                        resourceId = R.id.fl_wrapper,
-                        other = PokemonInfoFragment.newInstance(
-                            game = userDex.game,
-                            pokemon = p,
-                        ),
+                    replaceWithAnimWith(
+                        resourceId  = R.id.fl_wrapper,
+                        other       = PokemonInfoFragment.newInstance(
+                                            game = userDex.game,
+                                            pokemon = p,
+                                      ),
+                        enter   = R.anim.fade_enter_long,
+                        exit    = R.anim.fragment_fade_exit,
+                        popEnter= R.anim.fragment_open_enter,
+                        popExit = R.anim.fragment_open_exit,
                     )
                 }
             )
@@ -94,7 +96,6 @@ class PokedexFragment : Fragment() {
                     }
                 })
             }
-
             fetchPokedex()
         }
     }
@@ -144,7 +145,7 @@ class PokedexFragment : Fragment() {
                     ?.body()
                     ?.run {
                         userDex = this
-                        userDexAdapter.add(this.pokemon)
+                        userDexAdapter.add(this.pokemon,this.game.name)
                     }
                     ?: Log.e(
                         TAG,

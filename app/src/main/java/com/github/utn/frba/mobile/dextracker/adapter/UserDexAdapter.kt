@@ -1,22 +1,25 @@
 package com.github.utn.frba.mobile.dextracker.adapter
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.github.utn.frba.mobile.dextracker.PokedexFragment
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.Game
+import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDexPokemon
 import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import com.squareup.picasso.Picasso
+import retrofit2.Callback
 import java.util.*
 import kotlin.properties.Delegates
 
 class UserDexAdapter(
-    private val game: String,
     private val canEdit: Boolean,
     private val openEditor: () -> Unit,
     private val openPokemonInfo: (String) -> Unit,
@@ -27,9 +30,11 @@ class UserDexAdapter(
 
     private var dataset: MutableList<UserDexPokemon> = mutableListOf()
     var fullDataset: List<UserDexPokemon> = emptyList()
+    private lateinit var game: String
     var isEditing: Boolean = false
 
-    fun add(userDex: List<UserDexPokemon>) {
+    fun add(userDex: List<UserDexPokemon>, gameName: String) {
+        game = gameName
         dataset.addAll(userDex)
         fullDataset = userDex
         notifyDataSetChanged()
@@ -44,15 +49,29 @@ class UserDexAdapter(
         holder.name = p.name
         holder.number = p.dexNumber
         holder.caught = p.caught
-        /*val gameKey = game.name.takeWhile { it != '-' }
-        val url = if(gameKey == "bw" || gameKey == "b2w2")
-            "https://dex-tracker.herokuapp.com/sprites/$game/${p.name}.gif"
+        var gameKey = game.takeWhile { it != '-' }
+        gameKey.replace("b2w2","bw").also { gameKey = it }
+        gameKey.replace("dppt","dp").also { gameKey = it }
+        var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
+        if(gameKey == "bw")
+            url.replaceAfterLast(".","gif").also { url = it }
+        /*val url = if(gameKey == "bw")
+            "https://dex-tracker.herokuapp.com/sprites/bw/${p.name}.gif"
         else
             "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"*/
-        val url = "https://dex-tracker.herokuapp.com/sprites/$game/${p.name}.gif"
+        //val url = "https://dex-tracker.herokuapp.com/sprites/bw/${p.name}.gif"
         Picasso.get()
             .load(Uri.parse(url))
-            .into(holder.imageView)
+            .placeholder(R.drawable.placeholder_pokeball)
+            .error(R.drawable.placeholder)
+            .into(holder.itemView.findViewById(R.id.pokemon_picture), object: com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    //set animations here
+                }
+                override fun onError(e: java.lang.Exception?) {
+                    Log.e("UserDexAdapter", "Respuesta invalida al intentar cargar la imagen de $gameKey")
+                }
+            })
     }
 
     override fun getItemCount(): Int = dataset.size
@@ -76,7 +95,7 @@ class UserDexAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
+        private val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
         private val nameView: TextView = itemView.findViewById(R.id.pokemon_name)
         private val numberView: TextView = itemView.findViewById(R.id.pokemon_number)
 

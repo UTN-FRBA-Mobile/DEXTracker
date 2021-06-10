@@ -12,20 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textview_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FAV POKES"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchFAVPOKES"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/navbar_margin"
-            app:layout_constraintTop_toBottomOf="@+id/listFAVPOKES" />
-
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchFAVPOKES"
             android:layout_width="match_parent"

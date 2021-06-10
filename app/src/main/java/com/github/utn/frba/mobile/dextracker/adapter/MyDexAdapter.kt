@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.github.utn.frba.mobile.dextracker.PokedexFragment
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
@@ -32,7 +33,7 @@ class MyDexAdapter(
         val d = dex[position]
         holder.title = d.game.displayName
         holder.completion = d.caught to d.total
-        holder.completionPercentage = d.caught / d.total
+        holder.completionPercentage = (d.caught.toDouble() / d.total.toDouble() * 100).toInt()
         holder.dexId = d.id
     }
 
