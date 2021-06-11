@@ -1,15 +1,27 @@
 package com.github.utn.frba.mobile.dextracker
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import com.github.utn.frba.mobile.dextracker.data.User
+import com.github.utn.frba.mobile.dextracker.data.UserDex
+import com.github.utn.frba.mobile.dextracker.model.Session
+import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
+private const val USER_ID = "userId"
 
 /**
  * A simple [Fragment] subclass.
@@ -17,22 +29,95 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PerfilFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var session: Session
+    private lateinit var userId: String
+    private lateinit var imageView: ImageView
+    private lateinit var nick: TextView
+    private lateinit var dex_comp: TextView
+    private lateinit var poke_cau: TextView
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            userId = it.getString(USER_ID)!!
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false)
+        session = InMemoryRepository.session
+        userId = session.userId
+        return inflater.inflate(R.layout.fragment_perfil, container, false).also {
+            imageView   = it.findViewById(R.id.image)
+            nick        = it.findViewById(R.id.User)
+            dex_comp    = it.findViewById(R.id.dex_completed)
+            poke_cau    = it.findViewById(R.id.poke_caught)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Picasso.get()
+                .load(Uri.parse("url"))
+                .placeholder(R.drawable.placeholder_perfil)
+                .into(imageView, object: com.squareup.picasso.Callback {
+                    override fun onSuccess() {
+                        //set animations here
+                    }
+                    override fun onError(e: java.lang.Exception?) {
+                        Log.e(TAG, "Respuesta invalida al intentar cargar la imagen de perfil")
+                    }
+                })
+
+        fetchUser()
+    }
+
+    private fun completedDex(){
+        var completed = 0
+        var pokes: Int
+        user.pokedex.forEach{
+            pokes = 0
+            it.pokemon.forEach {
+                pokes = pokes.inc()
+            }
+            if(it.caught == pokes)
+                completed = completed.inc()
+        }
+        dex_comp.text = "Completed pokedex: ${completed}"
+    }
+
+    private fun pokeCaught(){
+        var caught = 0
+        user.pokedex.forEach { caught = caught.plus(it.caught) }
+        poke_cau.text = "Pokemons caught: ${caught}"
+    }
+
+    private fun fetchUser() {
+        val callResponse = dexTrackerService.fetchUser(userId = userId)
+
+        callResponse.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                response.takeIf { it.isSuccessful }
+                        ?.body()
+                        ?.run {
+                            user = this
+                            nick.text =  user.mail.substringBefore("@",user.mail)
+                            completedDex()
+                            pokeCaught()
+                        }
+                        ?: Log.e(
+                                TAG,
+                                "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
+                        )
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "Error al intentar obtener data del usuario", t)
+            }
+        })
     }
 
     companion object {
@@ -40,17 +125,15 @@ class PerfilFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param userId Parameter 1.
          * @return A new instance of fragment Perfil.
          */
-        // TODO: Rename and change types and number of parameters
+        private const val TAG = "PROFILE"
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(userId: String, param2: String) =
                 PerfilFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+                        putString(USER_ID, userId)
                     }
                 }
     }

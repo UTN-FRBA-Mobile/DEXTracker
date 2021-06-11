@@ -1,10 +1,11 @@
-package com.github.utn.frba.mobile.dextracker
+package com.github.utn.frba.mobile.dextracker.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.UserDexPokemon
 
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent.DummyItem

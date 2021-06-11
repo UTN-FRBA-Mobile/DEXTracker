@@ -45,4 +45,9 @@ interface DexTrackerService {
         @Path("game") game: String,
         @Path("pokemon") pokemon: String,
     ): Call<Pokemon>
+
+    @GET("/api/v1/users/{userId}")
+    fun fetchUser(
+            @Path("userId") userId: String,
+    ): Call<User>
 }

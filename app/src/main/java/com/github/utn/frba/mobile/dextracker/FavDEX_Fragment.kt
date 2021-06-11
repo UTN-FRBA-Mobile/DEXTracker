@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import com.github.utn.frba.mobile.dextracker.adapter.MyDexAdapter
-import com.github.utn.frba.mobile.dextracker.dummy.DummyContent
+import com.github.utn.frba.mobile.dextracker.adapter.FavDEXRecyclerViewAdapter
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.model.Session
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
