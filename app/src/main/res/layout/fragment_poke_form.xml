@@ -7,6 +7,7 @@
     android:theme="@style/Theme.DexTracker.PokeInfoEvoForm">
     <TextView
         android:id="@+id/pokeforms"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Form: "
@@ -15,12 +16,15 @@
         android:layout_margin="@dimen/text_margin" />
     <ImageView
         android:id="@+id/pokeimage"
+        android:alpha="0"
         android:layout_width="96dp"
         android:layout_height="96dp"
+        android:layout_gravity="center"
         android:background="@drawable/circle_white_background"
         android:visibility="gone" />
     <TextView
         android:id="@+id/pokeformname"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin" />

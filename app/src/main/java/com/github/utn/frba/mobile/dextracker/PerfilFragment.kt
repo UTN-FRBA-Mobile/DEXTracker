@@ -52,8 +52,21 @@ class PerfilFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_perfil, container, false).also {
             imageView   = it.findViewById(R.id.image)
             nick        = it.findViewById(R.id.User)
+            nick.animate().apply {
+                duration = 1000
+                startDelay = 500
+                alpha(1F)
+                }.start()
             dex_comp    = it.findViewById(R.id.dex_completed)
+            dex_comp.animate().apply {
+                duration = 1000
+                startDelay = 800
+                alpha(1F) }.start()
             poke_cau    = it.findViewById(R.id.poke_caught)
+            poke_cau.animate().apply {
+                duration = 1000
+                startDelay = 1000
+                alpha(1F) }.start()
         }
     }
 
@@ -66,6 +79,10 @@ class PerfilFragment : Fragment() {
                 .into(imageView, object: com.squareup.picasso.Callback {
                     override fun onSuccess() {
                         //set animations here
+                        imageView.animate().apply {
+                            duration = 1000
+                            alpha(1F)
+                        }.start()
                     }
                     override fun onError(e: java.lang.Exception?) {
                         Log.e(TAG, "Respuesta invalida al intentar cargar la imagen de perfil")
