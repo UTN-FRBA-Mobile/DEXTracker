@@ -6,55 +6,47 @@
     android:orientation="vertical"
     android:background="@drawable/bg_poke_dex"
     tools:context=".PokemonInfoFragment">
-   <TextView
-       android:text="HOLA"
-       android:gravity="center"
-       android:layout_width="match_parent"
-       android:layout_height="130dp"/>
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:layout_marginTop="130dp"
+    android:layout_marginBottom="76dp"
+    android:layout_marginHorizontal="38dp"
+    android:padding="10dp"
+    android:background="@drawable/custom_background_screen">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
-
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/navbar_margin"
-            app:layout_constraintTop_toBottomOf="@+id/forms_recycler_view" />
+            android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/forms_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/evolution_recycler_view"
-            tools:listitem="@layout/fragment_poke_form" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/forms_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/evolution_recycler_view"
+                tools:listitem="@layout/fragment_poke_form" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/evolution_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_recycler_view"
-            tools:listitem="@layout/fragment_poke_evolution" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/evolution_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/info_recycler_view"
+                tools:listitem="@layout/fragment_poke_evolution" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/info_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/fragment_pokeinfo" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/info_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/fragment_pokeinfo" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

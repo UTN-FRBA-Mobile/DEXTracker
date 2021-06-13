@@ -15,7 +15,7 @@
         android:alpha="0"
         android:fontFamily="@font/pokemon_solid"
         android:textSize="30sp"
-        android:textColor="@color/title_dark_3"
+        android:textColor="@color/title_light_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin" />
