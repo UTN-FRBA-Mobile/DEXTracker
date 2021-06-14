@@ -18,9 +18,19 @@
         android:progressDrawable="@drawable/circular_progress_bar"
         android:visibility="visible" />
 
+    <ImageButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_share"
+        android:background="@null"
+        android:layout_alignTop="@+id/pokedex_search_bar"
+        android:layout_alignBottom="@+id/pokedex_search_bar"
+        android:layout_toEndOf="@+id/pokedex_search_bar"/>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/pokedex_search_bar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_background_search"
         app:iconifiedByDefault="false"

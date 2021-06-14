@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ class PokedexFragment : Fragment() {
     private lateinit var dexId: String
     private lateinit var spinner: ProgressBar
     private lateinit var searchView: SearchView
+    private lateinit var shareView: ImageButton
     private lateinit var userDex: UserDex
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
@@ -96,6 +98,23 @@ class PokedexFragment : Fragment() {
                     }
                 })
             }
+
+            shareView = it.findViewById<ImageButton>(R.id.share).apply{
+                setOnClickListener {
+                    replaceWithAnimWith(
+                        resourceId  = R.id.fl_wrapper,
+                        other       = ShareDexFragment.newInstance(
+                            userId = userId,
+                            dexId = dexId,
+                        ),
+                        enter   = R.anim.fragment_open_enter,
+                        exit    = R.anim.fragment_fade_exit,
+                        popEnter= R.anim.fragment_open_enter,
+                        popExit = R.anim.fragment_fade_exit,
+                    )
+                }
+            }
+
             fetchPokedex()
         }
     }
