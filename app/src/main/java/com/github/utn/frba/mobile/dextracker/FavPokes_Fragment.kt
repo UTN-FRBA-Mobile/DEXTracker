@@ -8,14 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import com.github.utn.frba.mobile.dextracker.adapter.FavPokesRecyclerViewAdapter
 import com.github.utn.frba.mobile.dextracker.dummy.DummyContent
+import com.github.utn.frba.mobile.dextracker.model.Session
 
 /**
  * A fragment representing a list of Items.
  */
 class FavPokes_Fragment : Fragment() {
 
+    private lateinit var session: Session
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var favPokesAdapter: FavPokesRecyclerViewAdapter
     private var columnCount = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +43,23 @@ class FavPokes_Fragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = FavPokesRecyclerViewAdapter(DummyContent.ITEMS)
+                favPokesAdapter = FavPokesRecyclerViewAdapter(DummyContent.ITEMS)
             }
         }
-        return view
+        return view/*.also {
+            it.findViewById<androidx.appcompat.widget.SearchView>(R.id.searchFAVPOKES)
+                .setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        favPokesAdapter.searchText = query ?: ""
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        favPokesAdapter.searchText = newText ?: ""
+                        return true
+                    }
+                })
+        }*/
     }
 
     companion object {

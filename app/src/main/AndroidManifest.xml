@@ -14,8 +14,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/SplashTheme">
-
+            android:theme="@style/Theme.DexTracker">
             <!-- <android:theme="@style/Theme.DexTracker.NoActionBar"> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +26,7 @@
         <activity
             android:name=".LoginActivity"
             android:noHistory="true"
-            android:theme="@style/Theme.DexTracker.NoActionBar">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

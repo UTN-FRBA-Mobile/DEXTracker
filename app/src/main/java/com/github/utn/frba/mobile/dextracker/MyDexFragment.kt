@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.MyDexAdapter
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.model.Session
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 
@@ -28,12 +29,16 @@ class MyDexFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_my_dex, container, false).also {
             recyclerView = it.findViewById(R.id.my_dex_recycler_view)
             myDexAdapter = MyDexAdapter(session.pokedex) { dexId, userId ->
-                replaceWith(
+                replaceWithAnimWith(
                     R.id.fl_wrapper,
                     PokedexFragment.newInstance(
                         userId = userId,
                         dexId = dexId,
                     ),
+                    enter   = R.anim.fragment_open_enter,
+                    exit    = R.anim.fragment_open_exit,
+                    popEnter= R.anim.fragment_open_enter,
+                    popExit = R.anim.fragment_open_exit,
                 )
             }
 

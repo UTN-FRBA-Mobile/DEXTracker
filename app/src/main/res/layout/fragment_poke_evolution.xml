@@ -6,85 +6,110 @@
     android:theme="@style/Theme.DexTracker.PokeInfoEvoForm">
     <TextView
         android:id="@+id/pokeevolutions"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Evolution: "
-        android:textColor="@color/white"
+        android:textColor="@color/title_light_2"
         android:textSize="20sp"
         android:layout_margin="@dimen/text_margin" />
     <ImageView
-        android:background="@drawable/circle_white_background"
         android:id="@+id/pokemon_evolution_image"
+        android:alpha="0"
         android:layout_width="96dp"
         android:layout_height="96dp"
+        android:background="@drawable/circle_white_background"
         android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeevoname"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin" />
     <TextView
         android:id="@+id/pokemethod"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Method: "
-        android:textColor="@color/purple_700"
+        android:textColor="@color/title_light_3"
         android:textSize="20sp"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"/>
     <TextView
         android:id="@+id/pokeevotype"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"/>
     <TextView
         android:id="@+id/pokelevel"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokefriendship"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokemove"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokelocation"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/poketime"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeitem"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokegender"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeupsidedown"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokeregion"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/pokepokemon"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
 
 </LinearLayout>

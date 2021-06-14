@@ -15,6 +15,13 @@
     <color name="green_dark">#026328</color>
     <color name="orange_light">#FD8449</color>
     <color name="orange_dark">#A53702</color>
+    <color name="title_light_1">#FFFFFFFF</color>
+    <color name="title_light_2">#FFBB86FC</color>
+    <color name="title_light_3">#FF03DAC5</color>
+    <color name="title_dark_1">#FF3700B3</color>
+    <color name="title_dark_2">#1FAC06</color>
+    <color name="title_dark_3">#A53702</color>
+    <color name="status_nav_bar">#62C52C</color>
     <color name="dex_completion_bar_background">#B6BCE2</color>
     <color name="dex_completion_bar_incomplete">#3f51b5</color>
     <color name="dex_completion_bar_complete">#009C3A</color>

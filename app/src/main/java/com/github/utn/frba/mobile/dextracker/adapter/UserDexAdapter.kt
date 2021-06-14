@@ -1,14 +1,21 @@
 package com.github.utn.frba.mobile.dextracker.adapter
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.github.utn.frba.mobile.dextracker.PokedexFragment
 import com.github.utn.frba.mobile.dextracker.R
+import com.github.utn.frba.mobile.dextracker.data.Game
+import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDexPokemon
 import com.github.utn.frba.mobile.dextracker.extensions.mapIf
+import com.squareup.picasso.Picasso
+import retrofit2.Callback
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -23,9 +30,11 @@ class UserDexAdapter(
 
     private var dataset: MutableList<UserDexPokemon> = mutableListOf()
     var fullDataset: List<UserDexPokemon> = emptyList()
+    private lateinit var game: String
     var isEditing: Boolean = false
 
-    fun add(userDex: List<UserDexPokemon>) {
+    fun add(userDex: List<UserDexPokemon>, gameName: String) {
+        game = gameName
         dataset.addAll(userDex)
         fullDataset = userDex
         notifyDataSetChanged()
@@ -63,7 +72,7 @@ class UserDexAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
+        val imageView: ImageView = itemView.findViewById(R.id.pokemon_picture)
         private val nameView: TextView = itemView.findViewById(R.id.pokemon_name)
         private val numberView: TextView = itemView.findViewById(R.id.pokemon_number)
 
@@ -103,7 +112,8 @@ class UserDexAdapter(
         }
 
         private fun setBackground(caught: Boolean) {
-            itemView.setBackgroundResource(if (caught) R.color.green else R.color.white)
+            //itemView.setBackgroundResource(if (caught) R.color.green else R.color.white)
+            itemView.setBackgroundResource(if (caught) R.drawable.custom_background_poke else R.drawable.custom_background_poke_uncaught)
         }
     }
 }

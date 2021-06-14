@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
@@ -19,6 +20,7 @@ import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
 import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import retrofit2.Call
@@ -36,6 +38,7 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var dexId: String
     private lateinit var spinner: ProgressBar
     private lateinit var searchView: SearchView
+    private lateinit var shareView: ImageButton
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
     private var ownsDex: Boolean = false
@@ -69,12 +72,16 @@ class PokedexFragment private constructor() : Fragment() {
                 canEdit = ownsDex,
                 openEditor = { isEditing = true },
                 openPokemonInfo = { p ->
-                    replaceWith(
-                        resourceId = R.id.fl_wrapper,
-                        other = PokemonInfoFragment.newInstance(
-                            game = userDex.game,
-                            pokemon = p,
-                        ),
+                    replaceWithAnimWith(
+                        resourceId  = R.id.fl_wrapper,
+                        other       = PokemonInfoFragment.newInstance(
+                                            game = userDex.game,
+                                            pokemon = p,
+                                      ),
+                        enter   = R.anim.fade_enter_long,
+                        exit    = R.anim.fragment_fade_exit,
+                        popEnter= R.anim.fragment_open_enter,
+                        popExit = R.anim.fragment_open_exit,
                     )
                 }
             )
@@ -100,6 +107,21 @@ class PokedexFragment private constructor() : Fragment() {
             }
 
             compareButton = it.findViewById(R.id.compare_button)
+            shareView = it.findViewById<ImageButton>(R.id.share).apply{
+                setOnClickListener {
+                    replaceWithAnimWith(
+                        resourceId  = R.id.fl_wrapper,
+                        other       = ShareDexFragment.newInstance(
+                            userId = userId,
+                            dexId = dexId,
+                        ),
+                        enter   = R.anim.fragment_open_enter,
+                        exit    = R.anim.fragment_fade_exit,
+                        popEnter= R.anim.fragment_open_enter,
+                        popExit = R.anim.fragment_fade_exit,
+                    )
+                }
+            }
 
             fetchPokedex()
         }
@@ -150,7 +172,7 @@ class PokedexFragment private constructor() : Fragment() {
                     ?.body()
                     ?.let {
                         userDex = it
-                        userDexAdapter.add(it.pokemon)
+                        userDexAdapter.add(it.pokemon, it.game.name)
                         initializeCompareButton(it)
                     }
                     ?: Log.e(

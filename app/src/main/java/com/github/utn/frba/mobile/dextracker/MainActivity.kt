@@ -11,8 +11,10 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,6 +23,15 @@ import com.google.zxing.integration.android.IntentIntegrator
 const val cameraRequestCode = 9999
 
 class MainActivity : AppCompatActivity() {
+    private val perfilFragment = PerfilFragment()
+    private val myDexFragment = MyDexFragment()
+    private val favDexFragment = FavDEX_Fragment()
+    private val favPokesFragment = FavPokes_Fragment()
+    /////////////////////////////////////////////////////////
+    //SOLO PARA TESTING
+    //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
+    //val favPokesFragment = ShareDexFragment()
+    ////////////////////////////////////////////////////////
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //Thread.sleep(2000)  //Solo lo use para testear el splash
@@ -54,14 +65,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
 
-        val perfilFragment = PerfilFragment()
-        val myDexFragment = MyDexFragment()
-        val favDexFragment = FavDEX_Fragment()
-        val favPokesFragment = FavPokes_Fragment()
-        /////////////////////////////////////////////////////////
-        //SOLO PARA TESTING
-        //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
-        ////////////////////////////////////////////////////////
         makeCurrentFragment(myDexFragment)
 //        makeCurrentFragment(DexDiffFragment.newInstance(
 //            leftUserId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4",
@@ -88,7 +91,21 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Cancelado :(", Toast.LENGTH_LONG).show()
                 } else {
                     //Aca iria la redireccion hacia la DEX
-                    Toast.makeText(this, "Escaneado: " + result.contents, Toast.LENGTH_LONG).show()
+                    val userId = result.contents.substringBefore("@")
+                    val dexId = result.contents.substringAfter("@")
+                    makeCurrentFragment(favDexFragment)
+                    favDexFragment.replaceWithAnimWith(
+                        resourceId  = R.id.fl_wrapper,
+                        other       = PokedexFragment.newInstance(
+                            userId = userId,
+                            dexId = dexId,
+                        ),
+                        enter   = R.anim.fragment_open_enter,
+                        exit    = R.anim.fragment_fade_exit,
+                        popEnter= R.anim.fragment_open_enter,
+                        popExit = R.anim.fragment_open_exit,
+                    )
+                    Toast.makeText(this, "Escaneado:  \nUserID: $userId \nDexID: $dexId", Toast.LENGTH_LONG).show()
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data)
@@ -121,10 +138,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commit {
+                setCustomAnimations(
+                        R.anim.fragment_open_enter,
+                        R.anim.fragment_fade_exit,
+                        R.anim.fragment_fade_enter,
+                        R.anim.fragment_open_exit,
+                )
             replace(R.id.fl_wrapper, fragment)
-            commit()
-        }
+            }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

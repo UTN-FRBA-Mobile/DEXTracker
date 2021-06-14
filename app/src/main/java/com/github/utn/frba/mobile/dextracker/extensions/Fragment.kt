@@ -17,3 +17,23 @@ fun Fragment.replaceWith(resourceId: Int, other: Fragment, addToBackStack: Boole
         }
     }
 }
+fun Fragment.replaceWithAnimWith(resourceId: Int, other: Fragment, addToBackStack: Boolean = true, enter: Int, exit: Int, popEnter: Int, popExit: Int) {
+    val backStateName = other.javaClass.name
+
+    val fm = parentFragmentManager
+    val fragmentPopped: Boolean = fm.popBackStackImmediate(backStateName, 0)
+
+    if (!fragmentPopped) { //fragment not in back stack, create it.
+        fm.beginTransaction().apply {
+            setCustomAnimations(
+                    enter,
+                    exit,
+                    popEnter,
+                    popExit,
+            )
+            replace(resourceId, other)
+            if (addToBackStack) addToBackStack(backStateName)
+            commit()
+        }
+    }
+}

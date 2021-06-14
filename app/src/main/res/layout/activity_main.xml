@@ -37,6 +37,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:theme="@style/Theme.DexTracker"
     android:background="@color/light_gray">
 
     <FrameLayout
@@ -53,7 +54,7 @@
         app:fabCradleMargin="20dp"
         app:fabCradleVerticalOffset="10dp"
         app:fabCradleRoundedCornerRadius="20dp"
-        android:backgroundTint="@color/teal_700">
+        android:backgroundTint="@color/status_nav_bar">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
