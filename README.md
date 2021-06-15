@@ -25,4 +25,3 @@ Para esto, DexTracker se comunica mediante una API HTTP con dex-tracker.herokuap
 ## Integrantes
 * Ulises De Piero
 * Alejandro Peralta Bazas
-* Javier Leonardo Soto
