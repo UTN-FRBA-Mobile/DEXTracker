@@ -19,5 +19,11 @@
     <string name="title_activity_pokedex">PokedexActivity</string>
     <string name="pokemon_icon">pokemon_icon</string>
     <string name="_0_0">386/386</string>
-    <string name="compare">Comparar</string>
+    <string name="menu_1">Profile</string>
+    <string name="menu_2">My DEX</string>
+    <string name="menu_3">Fav DEX</string>
+    <string name="menu_4">Fav Pokes</string>
+    <string name="search_dex">Search Pokedex</string>
+    <string name="search_poke">Search Pokemon</string>
+    <string name="compare">Compare</string>
 </resources>

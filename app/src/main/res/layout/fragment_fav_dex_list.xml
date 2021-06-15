@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
-            app:queryHint="Buscar PokeDex"
+            app:queryHint="@string/search_dex"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/custom_background_search"
             android:layout_marginTop="@dimen/searchview_margin_top"

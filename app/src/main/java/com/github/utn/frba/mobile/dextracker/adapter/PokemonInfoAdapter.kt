@@ -36,11 +36,12 @@ class PokemonInfoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //Me parece mejor usar gif para todos directamente
-        /*val gameKey = game.name.takeWhile { it != '-' }
-        val url = if(gameKey == "bw" || gameKey == "b2w2")
-            "https://dex-tracker.herokuapp.com/sprites/bw/${pokemon.name}.gif"
-        else
-            "https://dex-tracker.herokuapp.com/sprites/$gameKey/${pokemon.name}.png"*/
+        /*var gameKey = game.takeWhile { it != '-' }
+        gameKey.replace("b2w2","bw").also { gameKey = it }
+        gameKey.replace("dppt","dp").also { gameKey = it }
+        var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
+        if(gameKey == "bw")
+            url.replaceAfterLast(".","gif").also { url = it }*/
 
         val url = "https://dex-tracker.herokuapp.com/sprites/bw/${pokemon.name}.gif"
 

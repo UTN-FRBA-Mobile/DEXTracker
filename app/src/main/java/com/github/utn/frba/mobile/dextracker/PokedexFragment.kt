@@ -44,11 +44,11 @@ class PokedexFragment private constructor() : Fragment() {
     private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
-        searchView.visibility = if (new) {
+        /*searchView.visibility = if (new) {
             View.GONE
         } else {
             View.VISIBLE
-        }
+        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,21 +107,23 @@ class PokedexFragment private constructor() : Fragment() {
             }
 
             compareButton = it.findViewById(R.id.compare_button)
-            shareView = it.findViewById<ImageButton>(R.id.share).apply{
-                setOnClickListener {
-                    replaceWithAnimWith(
-                        resourceId  = R.id.fl_wrapper,
-                        other       = ShareDexFragment.newInstance(
-                            userId = userId,
-                            dexId = dexId,
-                        ),
-                        enter   = R.anim.fragment_open_enter,
-                        exit    = R.anim.fragment_fade_exit,
-                        popEnter= R.anim.fragment_open_enter,
-                        popExit = R.anim.fragment_fade_exit,
-                    )
+            if (ownsDex)
+                shareView = it.findViewById<ImageButton>(R.id.share).apply{
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        replaceWithAnimWith(
+                            resourceId  = R.id.fl_wrapper,
+                            other       = ShareDexFragment.newInstance(
+                                userId = userId,
+                                dexId = dexId,
+                            ),
+                            enter   = R.anim.fragment_open_enter,
+                            exit    = R.anim.fragment_fade_exit,
+                            popEnter= R.anim.fragment_open_enter,
+                            popExit = R.anim.fragment_fade_exit,
+                        )
+                    }
                 }
-            }
 
             fetchPokedex()
         }

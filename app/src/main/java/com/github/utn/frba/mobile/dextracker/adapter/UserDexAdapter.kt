@@ -49,6 +49,26 @@ class UserDexAdapter(
         holder.name = p.name
         holder.number = p.dexNumber
         holder.caught = p.caught
+
+        var gameKey = game.takeWhile { it != '-' }
+        gameKey.replace("b2w2","bw").also { gameKey = it }
+        gameKey.replace("dppt","dp").also { gameKey = it }
+        var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
+        if(gameKey == "bw")
+            url.replaceAfterLast(".","gif").also { url = it }
+
+        Picasso.get()
+                .load(Uri.parse(url))
+                .placeholder(R.drawable.placeholder_pokeball)
+                .error(R.drawable.placeholder)
+                .into(holder.imageView, object: com.squareup.picasso.Callback {
+                    override fun onSuccess() {
+                        //set animations here
+                    }
+                    override fun onError(e: java.lang.Exception?) {
+                        Log.e("UserDexAdapter", "Respuesta invalida al intentar cargar la imagen de $gameKey")
+                    }
+                })
     }
 
     override fun getItemCount(): Int = dataset.size
@@ -91,7 +111,7 @@ class UserDexAdapter(
         }
 
         init {
-            imageView.setImageResource(R.drawable.placeholder)
+            //imageView.setImageResource(R.drawable.placeholder)
             itemView.setOnLongClickListener {
                 if (canEdit) {
                     openEditor()

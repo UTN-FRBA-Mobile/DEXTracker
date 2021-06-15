@@ -8,15 +8,16 @@
     tools:context="com.github.utn.frba.mobile.dextracker.PokedexFragment">
 
     <Button
-        android:background="@color/gray"
-        android:textColor="@color/black"
-        android:layout_alignParentEnd="true"
+        android:background="@drawable/custom_background_screen"
+        android:textColor="@color/orange_light"
         android:id="@+id/compare_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pokedex_toolbar"
+        android:layout_alignTop="@+id/pokedex_search_bar"
+        android:layout_alignBottom="@+id/pokedex_search_bar"
+        android:layout_toEndOf="@+id/pokedex_search_bar"
         android:text="@string/compare"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ProgressBar
         android:id="@+id/pokedex_spinner"
@@ -37,15 +38,17 @@
         android:background="@null"
         android:layout_alignTop="@+id/pokedex_search_bar"
         android:layout_alignBottom="@+id/pokedex_search_bar"
-        android:layout_toEndOf="@+id/pokedex_search_bar"/>
+        android:layout_toEndOf="@+id/pokedex_search_bar"
+        android:layout_marginLeft="15dp"
+        android:visibility="gone"/>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/pokedex_search_bar"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_background_search"
         app:iconifiedByDefault="false"
-        app:queryHint="Buscar Pokemon"
+        app:queryHint="@string/search_poke"
         android:layout_marginTop="@dimen/searchview_margin_top"
         android:layout_marginLeft="@dimen/fragment_horizontal_margin"
         android:layout_marginRight="@dimen/fragment_horizontal_margin"/>
