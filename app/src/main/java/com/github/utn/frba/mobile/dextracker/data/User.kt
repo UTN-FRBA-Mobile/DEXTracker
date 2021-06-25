@@ -6,6 +6,7 @@ data class User(
     val pokedex: List<UserDex>,
     val mail: String,
     val picture: String? = null,
+    val favourites: List<Favourite>,
 )
 
 data class UserDex(
@@ -31,5 +32,12 @@ data class UpdateUserDTO(
 
 data class DexUpdateDTO(
     val name: String? = null,
-    val caught: List<Int>
+    val caught: List<Int>,
+    val favourites: List<Int> = emptyList(),
+)
+
+data class Favourite(
+    val species: String,
+    val gen: Int,
+    val dexId: String,
 )
