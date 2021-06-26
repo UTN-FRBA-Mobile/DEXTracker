@@ -1,7 +1,6 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ class PokemonInfoFragment private constructor() : Fragment() {
     private lateinit var infoRecyclerView: RecyclerView
     private lateinit var evolutionRecyclerView: RecyclerView
     private lateinit var formsRecyclerView: RecyclerView
+    lateinit var onFavourite: (Pokemon) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +64,7 @@ class PokemonInfoFragment private constructor() : Fragment() {
                         infoAdapter = PokemonInfoAdapter(
                             pokemon = response.body()!!,
                             game = game,
+                            onFavourite = onFavourite,
                             context = context!!,
                         )
 

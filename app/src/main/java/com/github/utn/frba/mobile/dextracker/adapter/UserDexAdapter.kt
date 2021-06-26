@@ -46,21 +46,23 @@ class UserDexAdapter(
         holder.number = p.dexNumber
         holder.caught = p.caught
 
-        var gameKey = game.name.takeWhile { it != '-' }
-        gameKey.replace("b2w2","bw").also { gameKey = it }
-        gameKey.replace("dppt","dp").also { gameKey = it }
         val url = "https://dex-tracker.herokuapp.com/icons/gen${game.gen}/${p.name}.png"
 
         Picasso.get()
             .load(Uri.parse(url))
             .placeholder(R.drawable.placeholder_pokeball)
             .error(R.drawable.placeholder)
-            .into(holder.imageView, object: com.squareup.picasso.Callback {
+            .into(holder.imageView, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {
                     //set animations here
                 }
+
                 override fun onError(e: java.lang.Exception?) {
-                    Log.e("UserDexAdapter", "Respuesta invalida al intentar cargar la imagen de $gameKey", e)
+                    Log.e(
+                        TAG,
+                        "Respuesta invalida al intentar cargar la imagen de gen${game.gen}/${p.name}",
+                        e,
+                    )
                 }
             })
     }
@@ -129,5 +131,9 @@ class UserDexAdapter(
             //itemView.setBackgroundResource(if (caught) R.color.green else R.color.white)
             itemView.setBackgroundResource(if (caught) R.drawable.custom_background_poke else R.drawable.custom_background_poke_uncaught)
         }
+    }
+
+    companion object {
+        private const val TAG = "USER_DEX_ADAPTER"
     }
 }

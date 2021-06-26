@@ -3,9 +3,7 @@ package com.github.utn.frba.mobile.dextracker.adapter
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import com.bumptech.glide.request.target.Target
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.Game
 import com.github.utn.frba.mobile.dextracker.data.Pokemon
@@ -23,6 +22,7 @@ import com.github.utn.frba.mobile.dextracker.data.Pokemon
 class PokemonInfoAdapter(
     private val pokemon: Pokemon,
     private val game: Game,
+    private val onFavourite: (Pokemon) -> Unit,
     private val context: Context,
 ) : RecyclerView.Adapter<PokemonInfoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -35,14 +35,6 @@ class PokemonInfoAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //Me parece mejor usar gif para todos directamente
-        /*var gameKey = game.takeWhile { it != '-' }
-        gameKey.replace("b2w2","bw").also { gameKey = it }
-        gameKey.replace("dppt","dp").also { gameKey = it }
-        var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
-        if(gameKey == "bw")
-            url.replaceAfterLast(".","gif").also { url = it }*/
-
         val url = "https://dex-tracker.herokuapp.com/sprites/bw/${pokemon.name}.gif"
 
         holder.name.text   = pokemon.name

@@ -15,10 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.UserDexAdapter
-import com.github.utn.frba.mobile.dextracker.data.DexUpdateDTO
-import com.github.utn.frba.mobile.dextracker.data.UpdateUserDTO
-import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.UserDex
+import com.github.utn.frba.mobile.dextracker.data.*
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
@@ -41,14 +38,10 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var shareView: ImageButton
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
+    private val favourites: MutableList<Favourite> = mutableListOf()
     private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
-        /*searchView.visibility = if (new) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,14 +66,24 @@ class PokedexFragment private constructor() : Fragment() {
                 openEditor = { isEditing = true },
                 openPokemonInfo = { p ->
                     replaceWithAnimWith(
-                        resourceId  = R.id.fl_wrapper,
-                        other       = PokemonInfoFragment.newInstance(
-                                            game = userDex.game,
-                                            pokemon = p,
-                                      ),
-                        enter   = R.anim.fade_enter_long,
-                        exit    = R.anim.fragment_fade_exit,
-                        popEnter= R.anim.fragment_open_enter,
+                        resourceId = R.id.fl_wrapper,
+                        other = PokemonInfoFragment.newInstance(
+                            game = userDex.game,
+                            pokemon = p,
+                        ).also { frag ->
+                            frag.onFavourite = { pok ->
+                                favourites.add(
+                                    Favourite(
+                                        species = pok.name,
+                                        gen = userDex.game.gen,
+                                        dexId = dexId,
+                                    )
+                                )
+                            }
+                        },
+                        enter = R.anim.fade_enter_long,
+                        exit = R.anim.fragment_fade_exit,
+                        popEnter = R.anim.fragment_open_enter,
                         popExit = R.anim.fragment_open_exit,
                     )
                 }
@@ -135,11 +138,19 @@ class PokedexFragment private constructor() : Fragment() {
             userId = this.userId,
             updateUser = UpdateUserDTO(
                 username = null,
-                dex = mapOf(dexId to DexUpdateDTO(
-                    name = null,
-                    caught = userDexAdapter.fullDataset.filter { it.caught }
-                        .map { it.dexNumber }
-                ))
+                dex = mapOf(
+                    dexId to DexUpdateDTO(
+                        name = null,
+                        caught = userDexAdapter.fullDataset.filter { it.caught }
+                            .map { it.dexNumber },
+                    ),
+                ),
+                favourites = inMemoryRepository.apply {
+                    merge(
+                        dexId,
+                        favourites,
+                    )
+                }.session.favourites,
             ),
             token = inMemoryRepository.session.dexToken,
         )

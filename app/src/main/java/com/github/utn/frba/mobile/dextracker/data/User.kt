@@ -28,12 +28,12 @@ data class UserDexPokemon(
 data class UpdateUserDTO(
     val username: String? = null,
     val dex: Map<String, DexUpdateDTO>? = null,
+    val favourites: List<Favourite>,
 )
 
 data class DexUpdateDTO(
     val name: String? = null,
     val caught: List<Int>,
-    val favourites: List<Int> = emptyList(),
 )
 
 data class Favourite(
