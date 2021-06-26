@@ -27,4 +27,5 @@
     <color name="dex_completion_bar_complete">#009C3A</color>
     <color name="background_disabled">#edeae6</color>
     <color name="text_disabled">#a8a7a5</color>
+    <color name="yellow">#FFC107</color>
 </resources>

@@ -38,7 +38,7 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var shareView: ImageButton
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
-    private val favourites: MutableList<Favourite> = mutableListOf()
+    private var favourites: List<Favourite> = emptyList()
     private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
@@ -70,15 +70,17 @@ class PokedexFragment private constructor() : Fragment() {
                         other = PokemonInfoFragment.newInstance(
                             game = userDex.game,
                             pokemon = p,
+                            favourite = favourites.any { f -> f.species == p }
                         ).also { frag ->
-                            frag.onFavourite = { pok ->
-                                favourites.add(
-                                    Favourite(
+                            frag.addFavourite = { pok ->
+                                favourites = favourites +Favourite(
                                         species = pok.name,
                                         gen = userDex.game.gen,
                                         dexId = dexId,
                                     )
-                                )
+                            }
+                            frag.removeFavourite = { pok ->
+                                favourites = favourites.filterNot { p -> p.species == pok.name }
                             }
                         },
                         enter = R.anim.fade_enter_long,
@@ -111,18 +113,18 @@ class PokedexFragment private constructor() : Fragment() {
 
             compareButton = it.findViewById(R.id.compare_button)
             if (ownsDex)
-                shareView = it.findViewById<ImageButton>(R.id.share).apply{
+                shareView = it.findViewById<ImageButton>(R.id.share).apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
                         replaceWithAnimWith(
-                            resourceId  = R.id.fl_wrapper,
-                            other       = ShareDexFragment.newInstance(
+                            resourceId = R.id.fl_wrapper,
+                            other = ShareDexFragment.newInstance(
                                 userId = userId,
                                 dexId = dexId,
                             ),
-                            enter   = R.anim.fragment_open_enter,
-                            exit    = R.anim.fragment_fade_exit,
-                            popEnter= R.anim.fragment_open_enter,
+                            enter = R.anim.fragment_open_enter,
+                            exit = R.anim.fragment_fade_exit,
+                            popEnter = R.anim.fragment_open_enter,
                             popExit = R.anim.fragment_fade_exit,
                         )
                     }
