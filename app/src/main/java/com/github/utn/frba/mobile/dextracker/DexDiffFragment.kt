@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,6 +28,7 @@ class DexDiffFragment private constructor() : Fragment() {
     private lateinit var rightDiffAdapter: DexDiffAdapter
     private lateinit var leftDex: UserDex
     private lateinit var rightDex: UserDex
+    private lateinit var spinner: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,16 +46,19 @@ class DexDiffFragment private constructor() : Fragment() {
                     .takeIf { it.all { res -> res.isSuccessful && res.body() != null } }
                     ?.map { it.body()!! }
                     ?.let { (left, right) ->
-                        requireView().let {
-                            it.findViewById<TextView>(R.id.dex_diff_text).apply {
-                                text = left.game.displayName
+                        requireActivity().runOnUiThread {
+                            requireView().let {
+                                spinner.visibility = View.GONE
+                                it.findViewById<TextView>(R.id.dex_diff_text).apply {
+                                    text = left.game.displayName
+                                }
+
+                                leftDex = left
+                                leftDiffAdapter.setDataset(left.pokemon)
+
+                                rightDex = right
+                                rightDiffAdapter.setDataset(right.pokemon)
                             }
-
-                            leftDex = left
-                            leftDiffAdapter.setDataset(left.pokemon)
-
-                            rightDex = right
-                            rightDiffAdapter.setDataset(right.pokemon)
                         }
                     }
             }
@@ -75,6 +80,8 @@ class DexDiffFragment private constructor() : Fragment() {
             rightDiffAdapter = DexDiffAdapter()
             rightRecyclerView.adapter = rightDiffAdapter
             rightRecyclerView.setLayoutManager()
+
+            spinner = it.findViewById(R.id.dex_diff_spinner)
         }
     }
 
