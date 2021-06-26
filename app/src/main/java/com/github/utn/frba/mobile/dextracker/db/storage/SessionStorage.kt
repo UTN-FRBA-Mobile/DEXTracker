@@ -4,8 +4,8 @@ import android.content.Context
 import com.github.utn.frba.mobile.dextracker.data.Favourite
 import com.github.utn.frba.mobile.dextracker.db.db
 import com.github.utn.frba.mobile.dextracker.db.table.FavouritesTable
-import com.github.utn.frba.mobile.dextracker.db.table.PokedexRow
-import com.github.utn.frba.mobile.dextracker.db.table.SessionRow
+import com.github.utn.frba.mobile.dextracker.db.table.PokedexTable
+import com.github.utn.frba.mobile.dextracker.db.table.SessionTable
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
 
@@ -46,13 +46,13 @@ class SessionStorage(context: Context) {
         sessionDao.drop()
 
         sessionDao.save(
-            SessionRow(
+            SessionTable(
                 dexToken = session.dexToken,
                 userId = session.userId,
             )
         )
         pokedexDao.saveAll(session.pokedex.map {
-            PokedexRow(
+            PokedexTable(
                 id = it.id,
                 caught = it.caught,
                 total = it.total,

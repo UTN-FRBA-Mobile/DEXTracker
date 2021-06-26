@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.github.utn.frba.mobile.dextracker.data.Game
 
 @Entity
-data class PokedexRow(
+data class PokedexTable(
     @PrimaryKey val id: String,
     val userOwnerId: String,
     val caught: Int,

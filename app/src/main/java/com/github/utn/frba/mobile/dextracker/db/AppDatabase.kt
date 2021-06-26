@@ -8,8 +8,8 @@ import com.github.utn.frba.mobile.dextracker.db.dao.FavouritesDAO
 import com.github.utn.frba.mobile.dextracker.db.dao.PokedexDAO
 import com.github.utn.frba.mobile.dextracker.db.dao.SessionDAO
 import com.github.utn.frba.mobile.dextracker.db.table.FavouritesTable
-import com.github.utn.frba.mobile.dextracker.db.table.PokedexRow
-import com.github.utn.frba.mobile.dextracker.db.table.SessionRow
+import com.github.utn.frba.mobile.dextracker.db.table.PokedexTable
+import com.github.utn.frba.mobile.dextracker.db.table.SessionTable
 import com.github.utn.frba.mobile.dextracker.utils.Memoized
 import com.github.utn.frba.mobile.dextracker.utils.memo
 
@@ -23,7 +23,7 @@ val db: Memoized<Context, AppDatabase> = memo {
         .build()
 }
 
-@Database(entities = [SessionRow::class, PokedexRow::class, FavouritesTable::class], version = 3)
+@Database(entities = [SessionTable::class, PokedexTable::class, FavouritesTable::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun sessionDao(): SessionDAO
 
