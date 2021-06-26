@@ -15,4 +15,7 @@ interface PokedexDAO {
 
     @Insert
     suspend fun saveAll(pokedex: List<PokedexRow>)
+
+    @Query("delete from PokedexRow")
+    suspend fun drop()
 }
