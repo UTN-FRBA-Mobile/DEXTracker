@@ -3,16 +3,15 @@ package com.github.utn.frba.mobile.dextracker
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.model.Session
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -47,7 +46,7 @@ class PerfilFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        session = InMemoryRepository.session
+        session = inMemoryRepository.session
         userId = session.userId
         return inflater.inflate(R.layout.fragment_perfil, container, false).also {
             imageView   = it.findViewById(R.id.image)

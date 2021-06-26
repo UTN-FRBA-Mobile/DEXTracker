@@ -15,7 +15,7 @@ import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -149,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun redirectToMain(session: Session) {
-        InMemoryRepository.session = session
+        inMemoryRepository.session = session
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY

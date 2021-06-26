@@ -21,7 +21,7 @@ import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
 import retrofit2.Call
 import retrofit2.Callback
@@ -56,7 +56,7 @@ class PokedexFragment private constructor() : Fragment() {
         arguments?.let {
             userId = it.getString(USER_ID)!!
             dexId = it.getString(DEX_ID)!!
-            ownsDex = InMemoryRepository.session.userId == userId
+            ownsDex = inMemoryRepository.session.userId == userId
         }
     }
 
@@ -141,7 +141,7 @@ class PokedexFragment private constructor() : Fragment() {
                         .map { it.dexNumber }
                 ))
             ),
-            token = InMemoryRepository.session.dexToken,
+            token = inMemoryRepository.session.dexToken,
         )
 
         val updatedDex = userDex.copy(
@@ -149,7 +149,7 @@ class PokedexFragment private constructor() : Fragment() {
             pokemon = userDexAdapter.fullDataset,
         )
 
-        InMemoryRepository.merge(dexId = dexId, dex = updatedDex)
+        inMemoryRepository.merge(dexId = dexId, dex = updatedDex)
 
         callResponse.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -190,7 +190,7 @@ class PokedexFragment private constructor() : Fragment() {
     }
 
     private fun initializeCompareButton(userDex: UserDex) {
-        val comparableDexes = InMemoryRepository.session.pokedex
+        val comparableDexes = inMemoryRepository.session.pokedex
             .filter { dex -> dex.game.gen == userDex.game.gen }
         if (!ownsDex && comparableDexes.isNotEmpty()) compareButton.apply {
             visibility = View.VISIBLE
@@ -209,7 +209,7 @@ class PokedexFragment private constructor() : Fragment() {
                         replaceWith(
                             resourceId = R.id.fl_wrapper,
                             other = DexDiffFragment.newInstance(
-                                leftUserId = InMemoryRepository.session.userId,
+                                leftUserId = inMemoryRepository.session.userId,
                                 leftUserDexId = dex.id,
                                 rightUserId = userId,
                                 rightUserDexId = dexId,

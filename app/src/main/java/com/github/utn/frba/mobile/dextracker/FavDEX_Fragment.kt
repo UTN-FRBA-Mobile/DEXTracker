@@ -1,17 +1,17 @@
 package com.github.utn.frba.mobile.dextracker
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.github.utn.frba.mobile.dextracker.adapter.FavDEXRecyclerViewAdapter
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.model.Session
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 
 /**
  * A fragment representing a list of Items.
@@ -38,7 +38,7 @@ class FavDEX_Fragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_fav_dex_list, container, false)
         //val searchView = view.findViewById<SearchView>(R.id.searchFAVDEX)
         // Set the adapter
-        session = InMemoryRepository.session
+        session = inMemoryRepository.session
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = when {

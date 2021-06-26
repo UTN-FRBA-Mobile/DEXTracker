@@ -16,6 +16,7 @@ import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
@@ -167,6 +168,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         val sessionStorage = SessionStorage(this)
-        AsyncCoroutineExecutor.dispatch { sessionStorage.store(InMemoryRepository.session) }
+        AsyncCoroutineExecutor.dispatch { sessionStorage.store(inMemoryRepository.session) }
     }
 }

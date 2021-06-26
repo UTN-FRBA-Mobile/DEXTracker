@@ -9,11 +9,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.github.utn.frba.mobile.dextracker.PokedexFragment
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.extensions.percentageOf
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
+import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -80,7 +79,7 @@ class MyDexAdapter(
         init {
             cardView.setOnClickListener {
                 Log.i(TAG, "Clicked on $title")
-                onClick(dexId, InMemoryRepository.session.userId)
+                onClick(dexId, inMemoryRepository.session.userId)
             }
         }
     }

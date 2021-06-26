@@ -6,7 +6,9 @@ import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
 
-object InMemoryRepository {
+val inMemoryRepository = InMemoryRepository()
+
+class InMemoryRepository {
     lateinit var session: Session
         @Synchronized get
         @Synchronized set
