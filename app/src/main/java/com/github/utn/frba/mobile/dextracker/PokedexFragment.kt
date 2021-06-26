@@ -174,7 +174,8 @@ class PokedexFragment private constructor() : Fragment() {
                     ?.body()
                     ?.let {
                         userDex = it
-                        userDexAdapter.add(it.pokemon, it.game.name)
+                        userDexAdapter.add(it.pokemon)
+                        userDexAdapter.game = it.game
                         initializeCompareButton(it)
                     }
                     ?: Log.e(

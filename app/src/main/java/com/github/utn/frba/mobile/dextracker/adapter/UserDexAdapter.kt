@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.github.utn.frba.mobile.dextracker.PokedexFragment
 import com.github.utn.frba.mobile.dextracker.R
 import com.github.utn.frba.mobile.dextracker.data.Game
-import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDexPokemon
 import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import com.squareup.picasso.Picasso
-import retrofit2.Callback
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -30,11 +27,10 @@ class UserDexAdapter(
 
     private var dataset: MutableList<UserDexPokemon> = mutableListOf()
     var fullDataset: List<UserDexPokemon> = emptyList()
-    private lateinit var game: String
+    lateinit var game: Game
     var isEditing: Boolean = false
 
-    fun add(userDex: List<UserDexPokemon>, gameName: String) {
-        game = gameName
+    fun add(userDex: List<UserDexPokemon>) {
         dataset.addAll(userDex)
         fullDataset = userDex
         notifyDataSetChanged()
@@ -50,25 +46,23 @@ class UserDexAdapter(
         holder.number = p.dexNumber
         holder.caught = p.caught
 
-        var gameKey = game.takeWhile { it != '-' }
+        var gameKey = game.name.takeWhile { it != '-' }
         gameKey.replace("b2w2","bw").also { gameKey = it }
         gameKey.replace("dppt","dp").also { gameKey = it }
-        var url = "https://dex-tracker.herokuapp.com/sprites/$gameKey/${p.name}.png"
-        if(gameKey == "bw")
-            url.replaceAfterLast(".","gif").also { url = it }
+        val url = "https://dex-tracker.herokuapp.com/icons/gen${game.gen}/${p.name}.png"
 
         Picasso.get()
-                .load(Uri.parse(url))
-                .placeholder(R.drawable.placeholder_pokeball)
-                .error(R.drawable.placeholder)
-                .into(holder.imageView, object: com.squareup.picasso.Callback {
-                    override fun onSuccess() {
-                        //set animations here
-                    }
-                    override fun onError(e: java.lang.Exception?) {
-                        Log.e("UserDexAdapter", "Respuesta invalida al intentar cargar la imagen de $gameKey")
-                    }
-                })
+            .load(Uri.parse(url))
+            .placeholder(R.drawable.placeholder_pokeball)
+            .error(R.drawable.placeholder)
+            .into(holder.imageView, object: com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    //set animations here
+                }
+                override fun onError(e: java.lang.Exception?) {
+                    Log.e("UserDexAdapter", "Respuesta invalida al intentar cargar la imagen de $gameKey", e)
+                }
+            })
     }
 
     override fun getItemCount(): Int = dataset.size
