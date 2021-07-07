@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,36 +7,53 @@
     android:background="@drawable/bg_fav_pokes"
     tools:context=".FavPokes_Fragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ProgressBar
+        android:id="@+id/pokedex_spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="32dp"
+        android:paddingRight="6dp"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="visible" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchFAVPOKES"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_background_search"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/search_poke"
+        android:layout_marginTop="@dimen/searchview_margin_top"
+        android:layout_marginLeft="@dimen/fragment_horizontal_margin"
+        android:layout_marginRight="@dimen/fragment_horizontal_margin"/>
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchFAVPOKES"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchFAVPOKES">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:iconifiedByDefault="false"
-            app:queryHint="@string/search_poke"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/custom_background_search"
-            android:layout_marginTop="@dimen/searchview_margin_top"
-            android:layout_marginLeft="@dimen/fragment_horizontal_margin"
-            android:layout_marginRight="@dimen/fragment_horizontal_margin" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navbar_margin"
+                android:layout_below="@+id/listFAVPOKES"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listFAVPOKES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:context=".FavPokes_Fragment"
+                tools:listitem="@layout/fragment_fav_pokes_"
+                android:layout_marginBottom="@dimen/navbar_margin" />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listFAVPOKES"
-            android:name="com.github.utn.frba.mobile.dextracker.FavPokes_Fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchFAVPOKES"
-            tools:context=".FavPokes_Fragment"
-            tools:listitem="@layout/fragment_fav_pokes_" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</RelativeLayout>

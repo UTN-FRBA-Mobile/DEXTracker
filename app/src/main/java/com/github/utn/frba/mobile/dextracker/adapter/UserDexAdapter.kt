@@ -107,7 +107,6 @@ class UserDexAdapter(
         }
 
         init {
-            //imageView.setImageResource(R.drawable.placeholder)
             itemView.setOnLongClickListener {
                 if (canEdit) {
                     openEditor()

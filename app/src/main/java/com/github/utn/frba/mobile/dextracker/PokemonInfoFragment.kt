@@ -62,7 +62,7 @@ class PokemonInfoFragment private constructor() : Fragment() {
         evolutionRecyclerView = view.findViewById(R.id.evolution_recycler_view)
         formsRecyclerView = view.findViewById(R.id.forms_recycler_view)
         favouriteButton = view.findViewById(R.id.favourite)
-        favouriteButton.visibility = View.GONE
+        favouriteButton.visibility = View.INVISIBLE
         favouriteButton.setColorFilter(if (isFavourite) R.color.yellow else R.color.white)
         setFavourite(isFavourite)
 

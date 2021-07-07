@@ -39,6 +39,7 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
     private var favourites: List<Favourite> = emptyList()
+    private var favLoaded: Boolean = false
     private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
@@ -51,6 +52,7 @@ class PokedexFragment private constructor() : Fragment() {
             dexId = it.getString(DEX_ID)!!
             ownsDex = inMemoryRepository.session.userId == userId
         }
+        fetchUser()
     }
 
     override fun onCreateView(
@@ -136,26 +138,39 @@ class PokedexFragment private constructor() : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val callResponse = dexTrackerService.updateUser(
-            userId = this.userId,
-            updateUser = UpdateUserDTO(
-                username = null,
-                dex = mapOf(
-                    dexId to DexUpdateDTO(
-                        name = null,
-                        caught = userDexAdapter.fullDataset.filter { it.caught }
-                            .map { it.dexNumber },
+        if (favLoaded){
+            val callResponse = dexTrackerService.updateUser(
+                    userId = this.userId,
+                    updateUser = UpdateUserDTO(
+                            username = null,
+                            dex = mapOf(
+                                    dexId to DexUpdateDTO(
+                                            name = null,
+                                            caught = userDexAdapter.fullDataset.filter { it.caught }
+                                                    .map { it.dexNumber },
+                                    ),
+                            ),
+                            favourites = inMemoryRepository.apply {
+                                merge(
+                                        dexId,
+                                        favourites,
+                                )
+                            }.session.favourites,
                     ),
-                ),
-                favourites = inMemoryRepository.apply {
-                    merge(
-                        dexId,
-                        favourites,
-                    )
-                }.session.favourites,
-            ),
-            token = inMemoryRepository.session.dexToken,
-        )
+                    token = inMemoryRepository.session.dexToken,
+            )
+            callResponse.enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (!response.isSuccessful) {
+                        Log.w(TAG, "onono fallo actualizar el user doggo")
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Log.e(TAG, "ononon se rompió algo perro", t)
+                }
+            })
+        }
 
         val updatedDex = userDex.copy(
             caught = userDexAdapter.fullDataset.count { it.caught },
@@ -163,16 +178,29 @@ class PokedexFragment private constructor() : Fragment() {
         )
 
         inMemoryRepository.merge(dexId = dexId, dex = updatedDex)
+    }
 
+    private fun fetchUser() {
+        val callResponse = dexTrackerService.fetchUser(userId = userId)
         callResponse.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (!response.isSuccessful) {
-                    Log.w(TAG, "onono fallo actualizar el user doggo")
-                }
+                response.takeIf { it.isSuccessful }
+                        ?.body()
+                        ?.let {
+                            for(f in it.favourites){
+                                if (f.dexId==dexId)
+                                    favourites = favourites + f
+                            }
+                            favLoaded = true
+                        }
+                        ?: Log.e(
+                                TAG,
+                                "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
+                        )
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "ononon se rompió algo perro", t)
+                Log.e(TAG, "Error al intentar obtener data del usuario", t)
             }
         })
     }
