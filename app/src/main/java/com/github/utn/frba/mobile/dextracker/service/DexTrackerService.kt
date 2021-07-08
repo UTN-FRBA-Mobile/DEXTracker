@@ -46,8 +46,19 @@ interface DexTrackerService {
         @Path("pokemon") pokemon: String,
     ): Call<Pokemon>
 
-    @GET("/api/v1/users/{userId}")
+    @GET("users/{userId}")
     fun fetchUser(
-            @Path("userId") userId: String,
+        @Path("userId") userId: String,
     ): Call<User>
+
+    @GET("pokedex")
+    fun fetchPokedex(
+    ): Call<List<Pokedex>>
+
+    @POST("users/{user_id}/pokedex")
+    fun newDex(
+        @Path("user_id") userId: String,
+        @Header("dex-token") token: String,
+        @Body newDex: DexRequest,
+    ): Call<UserDex>
 }

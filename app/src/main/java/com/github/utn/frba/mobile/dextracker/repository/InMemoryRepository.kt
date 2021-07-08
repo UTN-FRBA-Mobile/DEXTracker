@@ -30,4 +30,12 @@ class InMemoryRepository {
             favourites = session.favourites.filterNot { it.dexId == dexId } + favourites,
         )
     }
+
+    fun merge(
+        dex: UserDex
+    ) {
+        session = session.copy(
+                pokedex = session.pokedex + PokedexRef(dex),
+        )
+    }
 }

@@ -41,3 +41,8 @@ data class Favourite(
     val gen: Int,
     val dexId: String,
 )
+
+data class DexRequest(
+    val game: String,
+    val name: String? = null,
+)

@@ -26,4 +26,7 @@
     <string name="search_dex">Search Pokedex</string>
     <string name="search_poke">Search Pokemon</string>
     <string name="compare">Compare</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
 </resources>
