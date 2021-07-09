@@ -1,5 +1,6 @@
 package com.github.utn.frba.mobile.dextracker
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,12 +38,12 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var spinner: ProgressBar
     private lateinit var searchView: SearchView
     private lateinit var shareView: ImageButton
+    private lateinit var favouriteButton: ImageButton
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
     private var subscriptionId: String? = null
     private var subscribed: Boolean? = null
     private var favourites: List<Favourite> = emptyList()
-    private var favLoaded: Boolean = false
     private var ownsDex: Boolean = false
     private var isEditing: Boolean by Delegates.observable(false) { _, _, new ->
         userDexAdapter.isEditing = new
@@ -53,8 +55,8 @@ class PokedexFragment private constructor() : Fragment() {
             userId = it.getString(USER_ID)!!
             dexId = it.getString(DEX_ID)!!
             ownsDex = inMemoryRepository.session.userId == userId
+            favourites = inMemoryRepository.session.favourites.filter { it.dexId == dexId }
         }
-        fetchUser()
     }
 
     override fun onCreateView(
@@ -77,14 +79,15 @@ class PokedexFragment private constructor() : Fragment() {
                             favourite = favourites.any { f -> f.species == p }
                         ).also { frag ->
                             frag.addFavourite = { pok ->
-                                favourites = favourites + Favourite(
+                                this.favourites = favourites + Favourite(
                                     species = pok.name,
                                     gen = userDex.game.gen,
                                     dexId = dexId,
                                 )
                             }
                             frag.removeFavourite = { pok ->
-                                favourites = favourites.filterNot { p -> p.species == pok.name }
+                                this.favourites = favourites
+                                    .filterNot { p -> p.species == pok.name }
                             }
                         },
                         enter = R.anim.fade_enter_long,
@@ -138,6 +141,14 @@ class PokedexFragment private constructor() : Fragment() {
                     .find { s -> s.userId == userId && s.dexId == dexId }
                     ?.subscriptionId
                 subscribed = subscriptionId != null
+                favouriteButton = it.findViewById<ImageButton>(R.id.favourite).apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        val subscribed = this@PokedexFragment.subscribed!!.not()
+                        setSubscribed(subscribed)
+                    }
+                }
+                setSubscribed(subscribed!!)
             }
 
             fetchPokedex()
@@ -146,8 +157,8 @@ class PokedexFragment private constructor() : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (favLoaded) {
-            val callResponse = dexTrackerService.updateUser(
+        if (ownsDex) {
+            dexTrackerService.updateUser(
                 userId = this.userId,
                 updateUser = UpdateUserDTO(
                     username = null,
@@ -166,8 +177,7 @@ class PokedexFragment private constructor() : Fragment() {
                     }.session.favourites,
                 ),
                 token = inMemoryRepository.session.dexToken,
-            )
-            callResponse.enqueue(object : Callback<User> {
+            ).enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (!response.isSuccessful) {
                         Log.w(TAG, "onono fallo actualizar el user doggo")
@@ -178,6 +188,11 @@ class PokedexFragment private constructor() : Fragment() {
                     Log.e(TAG, "ononon se rompió algo perro", t)
                 }
             })
+        } else {
+            when {
+                subscribed == true && subscriptionId == null -> subscribe()
+                subscribed == false && subscriptionId != null -> unsubscribe(subscriptionId!!)
+            }
         }
 
         val updatedDex = userDex.copy(
@@ -186,31 +201,6 @@ class PokedexFragment private constructor() : Fragment() {
         )
 
         inMemoryRepository.merge(dexId = dexId, dex = updatedDex)
-    }
-
-    private fun fetchUser() {
-        val callResponse = dexTrackerService.fetchUser(userId = userId)
-        callResponse.enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                response.takeIf { it.isSuccessful }
-                    ?.body()
-                    ?.let {
-                        for (f in it.favourites) {
-                            if (f.dexId == dexId)
-                                favourites = favourites + f
-                        }
-                        favLoaded = true
-                    }
-                    ?: Log.e(
-                        TAG,
-                        "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
-                    )
-            }
-
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "Error al intentar obtener data del usuario", t)
-            }
-        })
     }
 
     private fun fetchPokedex() {
@@ -321,6 +311,15 @@ class PokedexFragment private constructor() : Fragment() {
                 Log.e(TAG, "onono fallo directamente la pegada de dessubscripcion perrito")
             }
         })
+    }
+
+    private fun setSubscribed(subscribed: Boolean) {
+        this.subscribed = subscribed
+        val color = if (subscribed) R.color.yellow else R.color.white
+        favouriteButton.setColorFilter(
+            ContextCompat.getColor(requireContext(), color),
+            PorterDuff.Mode.SRC_IN,
+        )
     }
 
     companion object {
