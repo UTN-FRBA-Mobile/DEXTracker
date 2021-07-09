@@ -1,21 +1,20 @@
 package com.github.utn.frba.mobile.dextracker.model
 
-import com.github.utn.frba.mobile.dextracker.data.Favourite
-import com.github.utn.frba.mobile.dextracker.data.Game
-import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.UserDex
+import com.github.utn.frba.mobile.dextracker.data.*
 
 data class Session(
     val dexToken: String,
     val userId: String,
     val pokedex: List<PokedexRef>,
     val favourites: List<Favourite>,
+    val subscriptions: Set<Subscription>,
 ) {
     constructor(token: String, user: User) : this(
         userId = user.userId,
         dexToken = token,
         pokedex = user.pokedex.map { PokedexRef(it) },
         favourites = user.favourites,
+        subscriptions = emptySet(),
     )
 }
 

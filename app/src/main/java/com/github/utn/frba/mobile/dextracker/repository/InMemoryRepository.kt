@@ -1,6 +1,7 @@
 package com.github.utn.frba.mobile.dextracker.repository
 
 import com.github.utn.frba.mobile.dextracker.data.Favourite
+import com.github.utn.frba.mobile.dextracker.data.Subscription
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.mapIf
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
@@ -32,10 +33,16 @@ class InMemoryRepository {
     }
 
     fun merge(
-        dex: UserDex
+        dex: UserDex,
     ) {
         session = session.copy(
                 pokedex = session.pokedex + PokedexRef(dex),
+        )
+    }
+
+    fun put(subscriptions: Set<Subscription>) {
+        session = session.copy(
+            subscriptions = subscriptions,
         )
     }
 }

@@ -67,12 +67,12 @@ interface DexTrackerService {
         @Path("user_id") userId: String,
         @Header("dex-token") token: String,
         @Body subscription: SubscribeDTO,
-    )
+    ): Call<User>
 
     @DELETE("users/{user_id}/subscriptions/{id}")
     fun unsubscribe(
         @Path("user_id") userId: String,
         @Header("dex-token") token: String,
-        @Path("id") id: String,
-    )
+        @Path("id") subscriptionId: String,
+    ): Call<User>
 }

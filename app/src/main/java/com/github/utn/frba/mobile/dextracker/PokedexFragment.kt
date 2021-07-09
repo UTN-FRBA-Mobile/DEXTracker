@@ -38,6 +38,8 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var shareView: ImageButton
     private lateinit var userDex: UserDex
     private lateinit var compareButton: Button
+    private var subscriptionId: String? = null
+    private var subscribed: Boolean? = null
     private var favourites: List<Favourite> = emptyList()
     private var favLoaded: Boolean = false
     private var ownsDex: Boolean = false
@@ -75,11 +77,11 @@ class PokedexFragment private constructor() : Fragment() {
                             favourite = favourites.any { f -> f.species == p }
                         ).also { frag ->
                             frag.addFavourite = { pok ->
-                                favourites = favourites +Favourite(
-                                        species = pok.name,
-                                        gen = userDex.game.gen,
-                                        dexId = dexId,
-                                    )
+                                favourites = favourites + Favourite(
+                                    species = pok.name,
+                                    gen = userDex.game.gen,
+                                    dexId = dexId,
+                                )
                             }
                             frag.removeFavourite = { pok ->
                                 favourites = favourites.filterNot { p -> p.species == pok.name }
@@ -114,7 +116,7 @@ class PokedexFragment private constructor() : Fragment() {
             }
 
             compareButton = it.findViewById(R.id.compare_button)
-            if (ownsDex)
+            if (ownsDex) {
                 shareView = it.findViewById<ImageButton>(R.id.share).apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
@@ -131,6 +133,12 @@ class PokedexFragment private constructor() : Fragment() {
                         )
                     }
                 }
+            } else {
+                subscriptionId = inMemoryRepository.session.subscriptions
+                    .find { s -> s.userId == userId && s.dexId == dexId }
+                    ?.subscriptionId
+                subscribed = subscriptionId != null
+            }
 
             fetchPokedex()
         }
@@ -138,26 +146,26 @@ class PokedexFragment private constructor() : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (favLoaded){
+        if (favLoaded) {
             val callResponse = dexTrackerService.updateUser(
-                    userId = this.userId,
-                    updateUser = UpdateUserDTO(
-                            username = null,
-                            dex = mapOf(
-                                    dexId to DexUpdateDTO(
-                                            name = null,
-                                            caught = userDexAdapter.fullDataset.filter { it.caught }
-                                                    .map { it.dexNumber },
-                                    ),
-                            ),
-                            favourites = inMemoryRepository.apply {
-                                merge(
-                                        dexId,
-                                        favourites,
-                                )
-                            }.session.favourites,
+                userId = this.userId,
+                updateUser = UpdateUserDTO(
+                    username = null,
+                    dex = mapOf(
+                        dexId to DexUpdateDTO(
+                            name = null,
+                            caught = userDexAdapter.fullDataset.filter { it.caught }
+                                .map { it.dexNumber },
+                        ),
                     ),
-                    token = inMemoryRepository.session.dexToken,
+                    favourites = inMemoryRepository.apply {
+                        merge(
+                            dexId,
+                            favourites,
+                        )
+                    }.session.favourites,
+                ),
+                token = inMemoryRepository.session.dexToken,
             )
             callResponse.enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -185,18 +193,18 @@ class PokedexFragment private constructor() : Fragment() {
         callResponse.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 response.takeIf { it.isSuccessful }
-                        ?.body()
-                        ?.let {
-                            for(f in it.favourites){
-                                if (f.dexId==dexId)
-                                    favourites = favourites + f
-                            }
-                            favLoaded = true
+                    ?.body()
+                    ?.let {
+                        for (f in it.favourites) {
+                            if (f.dexId == dexId)
+                                favourites = favourites + f
                         }
-                        ?: Log.e(
-                                TAG,
-                                "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
-                        )
+                        favLoaded = true
+                    }
+                    ?: Log.e(
+                        TAG,
+                        "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
+                    )
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
@@ -264,6 +272,55 @@ class PokedexFragment private constructor() : Fragment() {
                 }
             }
         }
+    }
+
+    fun subscribe() {
+        val subscribe = SubscribeDTO(
+            userId = userId,
+            dexId = dexId,
+        )
+
+        dexTrackerService.subscribe(
+            userId = inMemoryRepository.session.userId,
+            token = inMemoryRepository.session.dexToken,
+            subscription = subscribe,
+        ).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                response.takeIf { it.isSuccessful }
+                    ?.body()
+                    ?.let {
+                        inMemoryRepository.put(it.subscriptions)
+                    } ?: run {
+                    Log.e(TAG, "onono perro fallo la subscripcion")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onono fallo directamente la pegada de subscripcion perrito")
+            }
+        })
+    }
+
+    fun unsubscribe(subscriptionId: String) {
+        dexTrackerService.unsubscribe(
+            userId = inMemoryRepository.session.userId,
+            token = inMemoryRepository.session.dexToken,
+            subscriptionId = subscriptionId,
+        ).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                response.takeIf { it.isSuccessful }
+                    ?.body()
+                    ?.let {
+                        inMemoryRepository.put(it.subscriptions)
+                    } ?: run {
+                    Log.e(TAG, "onono perro fallo la dessubscripcion")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onono fallo directamente la pegada de dessubscripcion perrito")
+            }
+        })
     }
 
     companion object {
