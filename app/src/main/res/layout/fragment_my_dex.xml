@@ -8,6 +8,17 @@
     android:background="@drawable/bg_my_dex"
     tools:context=".MyDexFragment">
 
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="32dp"
+        android:paddingEnd="6dp"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="gone" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/my_dex_search_bar"
         android:layout_width="match_parent"
@@ -20,6 +31,7 @@
         app:queryHint="@string/search_dex" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/my_dexes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_dex_search_bar">

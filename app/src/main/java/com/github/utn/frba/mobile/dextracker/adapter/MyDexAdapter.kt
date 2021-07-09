@@ -53,6 +53,11 @@ class MyDexAdapter(
         notifyDataSetChanged()
     }
 
+    fun add(d: PokedexRef) {
+        this.dex = dex + d
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val cardView: CardView = itemView.findViewById(R.id.my_dex_card)
         private val iconView: ImageView = itemView.findViewById(R.id.my_dex_icon)
