@@ -7,6 +7,13 @@ data class User(
     val mail: String,
     val picture: String? = null,
     val favourites: List<Favourite>,
+    val subscriptions: Set<Subscription> = emptySet(),
+)
+
+data class Subscription(
+    val subscriptionId: String,
+    val userId: String,
+    val dexId: String,
 )
 
 data class UserDex(

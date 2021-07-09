@@ -61,4 +61,18 @@ interface DexTrackerService {
         @Header("dex-token") token: String,
         @Body newDex: DexRequest,
     ): Call<UserDex>
+
+    @POST("users/{user_id}/subscriptions")
+    fun subscribe(
+        @Path("user_id") userId: String,
+        @Header("dex-token") token: String,
+        @Body subscription: SubscribeDTO,
+    )
+
+    @DELETE("users/{user_id}/subscriptions/{id}")
+    fun unsubscribe(
+        @Path("user_id") userId: String,
+        @Header("dex-token") token: String,
+        @Path("id") id: String,
+    )
 }
