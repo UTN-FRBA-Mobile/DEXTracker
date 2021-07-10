@@ -14,7 +14,6 @@ import com.github.utn.frba.mobile.dextracker.adapter.FavPokesRecyclerViewAdapter
 import com.github.utn.frba.mobile.dextracker.data.Favourite
 import com.github.utn.frba.mobile.dextracker.data.Game
 import com.github.utn.frba.mobile.dextracker.data.User
-import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.model.Session
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
@@ -31,7 +30,7 @@ class FavPokes_Fragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var favPokesAdapter: FavPokesRecyclerViewAdapter
     private lateinit var userId: String
-    private lateinit var spinner: ProgressBar
+    private lateinit var loader: ProgressBar
     private lateinit var searchView: SearchView
     private lateinit var user: User
     lateinit var game: Game
@@ -79,7 +78,7 @@ class FavPokes_Fragment : Fragment() {
                     }
             )
             recyclerView.adapter = favPokesAdapter
-            spinner = it.findViewById(R.id.pokedex_spinner)
+            loader = it.findViewById(R.id.pokedex_spinner)
 
             val layoutManager = GridLayoutManager(context, 3)
             recyclerView.layoutManager = layoutManager
@@ -108,7 +107,7 @@ class FavPokes_Fragment : Fragment() {
 
         callResponse.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                spinner.visibility = View.GONE
+                loader.visibility = View.GONE
                 response.takeIf { it.isSuccessful }
                         ?.body()
                         ?.run {

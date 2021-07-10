@@ -35,7 +35,7 @@ class PokedexFragment private constructor() : Fragment() {
     private lateinit var userDexAdapter: UserDexAdapter
     private lateinit var userId: String
     private lateinit var dexId: String
-    private lateinit var spinner: ProgressBar
+    private lateinit var loader: ProgressBar
     private lateinit var searchView: SearchView
     private lateinit var shareView: ImageButton
     private lateinit var favouriteButton: ImageButton
@@ -98,7 +98,7 @@ class PokedexFragment private constructor() : Fragment() {
                 }
             )
             recyclerView.adapter = userDexAdapter
-            spinner = it.findViewById(R.id.pokedex_spinner)
+            loader = it.findViewById(R.id.pokedex_spinner)
 
             val layoutManager = GridLayoutManager(context, 3)
             recyclerView.layoutManager = layoutManager
@@ -208,7 +208,7 @@ class PokedexFragment private constructor() : Fragment() {
 
         callResponse.enqueue(object : Callback<UserDex> {
             override fun onResponse(call: Call<UserDex>, response: Response<UserDex>) {
-                spinner.visibility = View.GONE
+                loader.visibility = View.GONE
                 response.takeIf { it.isSuccessful }
                     ?.body()
                     ?.let {
