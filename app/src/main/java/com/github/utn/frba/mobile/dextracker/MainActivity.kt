@@ -1,6 +1,5 @@
 package com.github.utn.frba.mobile.dextracker
 
-//import com.google.android.material.snackbar.Snackbar
 
 import android.app.Activity
 import android.content.Intent
@@ -16,7 +15,6 @@ import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.firebase.redirect
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,37 +27,19 @@ class MainActivity : AppCompatActivity() {
     private val myDexFragment = MyDexFragment()
     private val favDexFragment = FavDEX_Fragment()
     private val favPokesFragment = FavPokes_Fragment()
-    /////////////////////////////////////////////////////////
-    //SOLO PARA TESTING
-    //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
-    //val favPokesFragment = ShareDexFragment()
-    ////////////////////////////////////////////////////////
-    override fun onCreate(savedInstanceState: Bundle?) {
 
-        //Thread.sleep(2000)  //Solo lo use para testear el splash
+    override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_DexTracker_NoActionBar)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(findViewById(R.id.toolbar))
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            //Toast.makeText(this,"Aqui pondria el scanner...si tan solo tuviera uno",Toast.LENGTH_LONG).show()
-            /*if(Permisos.checkForPermissions(
-                    this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    cameraRequestCode,
-                    "No se puede escanear un codigo si no tenemos acceso a tu camara"))
-                    {*/
             val scanner = IntentIntegrator(this)
             scanner.setOrientationLocked(false)
             scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
             scanner.setPrompt("Escanea el codigo QR de la PokeDEX deseada")
             scanner.initiateScan()
-            //}
-
-            /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()*/
         }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -68,12 +48,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.misdex
 
         makeCurrentFragment(redirect?.to() ?: myDexFragment)
-//        makeCurrentFragment(DexDiffFragment.newInstance(
-//            leftUserId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4",
-//            leftUserDexId = "UD-2021-06-05-2ff23c99-7811-4e4a-a127-ebb4ab599af0",
-//            rightUserId = "U-2021-04-18-36d52c56-4cbd-4e81-9885-80e095990bf8",
-//            rightUserDexId = "UD-2021-04-18-a7263e1a-e894-4ffc-8a78-711ac7140e65"
-//        ))
+
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.perfil -> makeCurrentFragment(perfilFragment)
@@ -151,15 +126,11 @@ class MainActivity : AppCompatActivity() {
             }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)

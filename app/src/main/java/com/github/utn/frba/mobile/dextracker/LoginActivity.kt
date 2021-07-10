@@ -23,8 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        FirebaseMessaging.getInstance().subscribeToTopic("test")
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_DexTracker_NoActionBar)
@@ -164,32 +161,4 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "LOGIN"
     }
-
-//    private fun setFirebaseTokenInView() {
-//        val firebaseTokenText = MyPreferences.getFirebaseToken(this)
-//
-//        if (binding.firebaseToken.text != null) {
-//            binding.firebaseToken.text = firebaseTokenText
-//            binding.reloadButton.visibility = View.GONE
-//            binding.copyButton.visibility = View.VISIBLE
-//            binding.topicContainer.visibility = View.VISIBLE
-//        } else {
-//            binding.copyButton.visibility = View.GONE
-//            binding.topicContainer.visibility = View.GONE
-//            binding.reloadButton.visibility = View.VISIBLE
-//        }
-//    }
-//
-//    private fun subscribeToTopic() {
-//        val topicText = binding.topic.text.toString()
-//        FirebaseMessaging.getInstance().subscribeToTopic(topicText)
-//        Toast.makeText(this, "Subscripto a $topicText", Toast.LENGTH_SHORT).show()
-//        binding.topic.setText("")
-//    }
-//
-//    fun copyTokenToClipboard() {
-//        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-//        val clip = ClipData.newPlainText("Firebase token", binding.firebaseToken.text)
-//        clipboard.setPrimaryClip(clip)
-//    }
 }
