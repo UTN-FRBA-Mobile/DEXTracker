@@ -15,6 +15,7 @@ import androidx.fragment.app.commit
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
+import com.github.utn.frba.mobile.dextracker.firebase.redirect
 import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
 
-        makeCurrentFragment(myDexFragment)
+        makeCurrentFragment(redirect?.to() ?: myDexFragment)
 //        makeCurrentFragment(DexDiffFragment.newInstance(
 //            leftUserId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4",
 //            leftUserDexId = "UD-2021-06-05-2ff23c99-7811-4e4a-a127-ebb4ab599af0",

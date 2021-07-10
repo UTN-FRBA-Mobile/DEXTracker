@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.github.utn.frba.mobile.dextracker.databinding.ActivityLoginBinding
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.constants.RC_SIGN_IN
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
@@ -22,24 +23,28 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var sessionStorage: SessionStorage
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        FirebaseMessaging.getInstance().subscribeToTopic("test")
+        super.onCreate(savedInstanceState)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_DexTracker_NoActionBar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.parseColor("#EFEFEFEF")
         }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("527824744722-4hoj7bcnjvpa6co3tapt6faj5tbj4uor.apps.googleusercontent.com")
@@ -159,4 +164,32 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "LOGIN"
     }
+
+//    private fun setFirebaseTokenInView() {
+//        val firebaseTokenText = MyPreferences.getFirebaseToken(this)
+//
+//        if (binding.firebaseToken.text != null) {
+//            binding.firebaseToken.text = firebaseTokenText
+//            binding.reloadButton.visibility = View.GONE
+//            binding.copyButton.visibility = View.VISIBLE
+//            binding.topicContainer.visibility = View.VISIBLE
+//        } else {
+//            binding.copyButton.visibility = View.GONE
+//            binding.topicContainer.visibility = View.GONE
+//            binding.reloadButton.visibility = View.VISIBLE
+//        }
+//    }
+//
+//    private fun subscribeToTopic() {
+//        val topicText = binding.topic.text.toString()
+//        FirebaseMessaging.getInstance().subscribeToTopic(topicText)
+//        Toast.makeText(this, "Subscripto a $topicText", Toast.LENGTH_SHORT).show()
+//        binding.topic.setText("")
+//    }
+//
+//    fun copyTokenToClipboard() {
+//        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//        val clip = ClipData.newPlainText("Firebase token", binding.firebaseToken.text)
+//        clipboard.setPrimaryClip(clip)
+//    }
 }
