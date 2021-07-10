@@ -8,6 +8,8 @@ var redirect: Redirection? = null
 
 interface Redirection {
     fun to(): Fragment
+
+    fun location(): String
 }
 
 data class RedirectToPokedex(
@@ -18,4 +20,6 @@ data class RedirectToPokedex(
         userId = userId,
         dexId = dexId,
     )
+
+    override fun location(): String = "/users/$userId/dex/$dexId"
 }

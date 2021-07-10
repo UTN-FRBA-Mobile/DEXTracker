@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -47,7 +48,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
 
-        makeCurrentFragment(redirect?.to() ?: myDexFragment)
+        val fragment = redirect?.also { Log.i(TAG, "Redirect to ${it.location()}") }
+            ?.to()
+            ?: myDexFragment
+        makeCurrentFragment(fragment)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -72,17 +76,21 @@ class MainActivity : AppCompatActivity() {
                     val dexId = result.contents.substringAfter("@")
                     makeCurrentFragment(favDexFragment)
                     favDexFragment.replaceWithAnimWith(
-                        resourceId  = R.id.fl_wrapper,
-                        other       = PokedexFragment.newInstance(
+                        resourceId = R.id.fl_wrapper,
+                        other = PokedexFragment.newInstance(
                             userId = userId,
                             dexId = dexId,
                         ),
-                        enter   = R.anim.fragment_open_enter,
-                        exit    = R.anim.fragment_fade_exit,
-                        popEnter= R.anim.fragment_open_enter,
+                        enter = R.anim.fragment_open_enter,
+                        exit = R.anim.fragment_fade_exit,
+                        popEnter = R.anim.fragment_open_enter,
                         popExit = R.anim.fragment_open_exit,
                     )
-                    Toast.makeText(this, "Escaneado:  \nUserID: $userId \nDexID: $dexId", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Escaneado:  \nUserID: $userId \nDexID: $dexId",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data)
@@ -116,14 +124,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun makeCurrentFragment(fragment: Fragment) =
         supportFragmentManager.commit {
-                setCustomAnimations(
-                        R.anim.fragment_open_enter,
-                        R.anim.fragment_fade_exit,
-                        R.anim.fragment_fade_enter,
-                        R.anim.fragment_open_exit,
-                )
+            setCustomAnimations(
+                R.anim.fragment_open_enter,
+                R.anim.fragment_fade_exit,
+                R.anim.fragment_fade_enter,
+                R.anim.fragment_open_exit,
+            )
             replace(R.id.fl_wrapper, fragment)
-            }
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -141,5 +149,9 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         val sessionStorage = SessionStorage(this)
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(inMemoryRepository.session) }
+    }
+
+    companion object {
+        private const val TAG = "MAIN"
     }
 }

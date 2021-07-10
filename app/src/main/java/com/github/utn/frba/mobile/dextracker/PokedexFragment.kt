@@ -291,7 +291,9 @@ class PokedexFragment private constructor() : Fragment() {
             }
         })
 
-        FirebaseMessaging.getInstance().subscribeToTopic("$userId===$dexId")
+        val topic = "$userId---$dexId"
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+        Log.i(TAG, "Subscribed to topic $topic")
     }
 
     private fun unsubscribe(subscriptionId: String) {
@@ -316,6 +318,8 @@ class PokedexFragment private constructor() : Fragment() {
         })
 
         FirebaseMessaging.getInstance().unsubscribeFromTopic("$userId===$dexId")
+        val topic = "$userId---$dexId"
+        Log.i(TAG, "Unsubscribed from topic $topic")
     }
 
     private fun setSubscribed(subscribed: Boolean) {
