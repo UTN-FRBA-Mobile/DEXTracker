@@ -19,20 +19,29 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.takeUnless { it.isEmpty() }
             ?.let {
-                val redirection = when (it["type"]) {
-                    POKEDEX -> RedirectToPokedex(
-                        userId = it["userId"]!!,
-                        dexId = it["dexId"]!!,
-                    )
+                val notification = when (it["type"]) {
+                    POKEDEX -> {
+                        val frag = RedirectToPokedex(
+                            userId = it["userId"]!!,
+                            dexId = it["dexId"]!!,
+                        )
+                        val title = getString(R.string.dex_update_notification_title)
+                        val body = getString(
+                            R.string.dex_update_notification_body,
+                            it["username"],
+                            it["game"],
+                        )
+
+                        Triple(frag, title, body)
+                    }
                     else -> null
                 }
 
-                redirect = redirection
+                notification?.let { (redirection, title, body) ->
+                    redirect = redirection
+                    showNotification(title = title, body = body)
+                }
             }
-
-        if (remoteMessage.notification != null) {
-            showNotification(remoteMessage.notification!!)
-        }
     }
 
     override fun onNewToken(newToken: String) {
@@ -41,7 +50,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(newToken)
     }
 
-    private fun showNotification(notification: RemoteMessage.Notification) {
+    private fun showNotification(title: String, body: String) {
         val intent = Intent(this, LoginActivity::class.java)
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -56,8 +65,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(notification.title)
-            .setContentText(notification.body)
+            .setContentTitle(title)
+            .setContentText(body)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
