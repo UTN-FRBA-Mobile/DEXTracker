@@ -2,6 +2,7 @@ package com.github.utn.frba.mobile.dextracker.widget
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.github.utn.frba.mobile.dextracker.R
@@ -29,12 +30,15 @@ class ListProvider(
     override fun getViewAt(position: Int): RemoteViews {
         val remoteView = RemoteViews(context.packageName, R.layout.dex_widget)
         val dex = pokedex[position]
-        remoteView.setTextViewText(R.id.my_dex_completion, "${dex.caught}/${dex.total}")
-        remoteView.setTextViewText(R.id.my_dex_title, dex.name ?: dex.game.displayName)
-        remoteView.setTextViewText(
-            R.id.my_dex_completion_percentage,
-            "${dex.caught * 100 / dex.total}%",
-        )
+        remoteView.setTextViewText(R.id.widget_dex_completion, "${dex.caught}/${dex.total}")
+        remoteView.setTextViewText(R.id.widget_dex_title, dex.name ?: dex.game.displayName)
+
+        val extras = Bundle()
+        extras.putInt(OPEN, position)
+        val intent = Intent()
+        intent.putExtras(extras)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        remoteView.setOnClickFillInIntent(R.id.widget_dex_title, intent)
 
         return remoteView
     }

@@ -92,23 +92,14 @@ class PerfilFragment : Fragment() {
     }
 
     private fun completedDex(){
-        var completed = 0
-        var pokes: Int
-        user.pokedex.forEach{
-            pokes = 0
-            it.pokemon.forEach {
-                pokes = pokes.inc()
-            }
-            if(it.caught == pokes)
-                completed = completed.inc()
-        }
-        dex_comp.text = "Completed pokedex: ${completed}"
+        dex_comp.text = "Completed pokedex: ${user.pokedex.count { it.caught == it.pokemon.size }}"
     }
 
     private fun pokeCaught(){
-        var caught = 0
-        user.pokedex.forEach { caught = caught.plus(it.caught) }
-        poke_cau.text = "Pokemons caught: ${caught}"
+        val caught = user.pokedex
+            .map { it.caught }
+            .sum()
+        poke_cau.text = "Pokemons caught: $caught"
     }
 
     private fun fetchUser() {

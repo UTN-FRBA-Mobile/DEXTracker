@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.github.utn.frba.mobile.dextracker.LoginActivity
 import com.github.utn.frba.mobile.dextracker.MyPreferences
@@ -52,14 +51,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun showNotification(title: String, body: String) {
         val intent = Intent(this, LoginActivity::class.java)
-
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val requestCode = 0
 
         val pendingIntent = PendingIntent.getActivity(
-            this, requestCode, intent,
-            PendingIntent.FLAG_ONE_SHOT
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_ONE_SHOT,
         )
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

@@ -2,7 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/pokedex_widget"
     android:initialLayout="@layout/pokedex_widget"
-    android:minWidth="200dp"
+    android:minWidth="300dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/dexicon"
     android:resizeMode="horizontal|vertical"
