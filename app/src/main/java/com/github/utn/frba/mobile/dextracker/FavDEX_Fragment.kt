@@ -9,10 +9,8 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.FavDEXRecyclerViewAdapter
-import com.github.utn.frba.mobile.dextracker.adapter.MyDexAdapter
 import com.github.utn.frba.mobile.dextracker.data.UserDex
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
@@ -30,10 +28,12 @@ class FavDEX_Fragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var favDEXAdapter: FavDEXRecyclerViewAdapter
     val dex: MutableList<PokedexRef> = mutableListOf()
+    var wait: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         session = inMemoryRepository.session
+        wait = session.subscriptions.size
         fillDex()
     }
 
@@ -44,7 +44,6 @@ class FavDEX_Fragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_fav_dex_list, container, false).also {
             recyclerView = it.findViewById(R.id.fav_dex_recycler_view)
-
             favDEXAdapter = FavDEXRecyclerViewAdapter(dex, session.subscriptions) { dexId, userId ->
                 replaceWithAnimWith(
                         R.id.fl_wrapper,
@@ -97,18 +96,33 @@ class FavDEX_Fragment : Fragment() {
                         ?.body()
                         ?.let {
                             dex.add(PokedexRef(it))
+                            wait.dec()
+                            if (wait == 0)
+                                replaceWith(
+                                        R.id.fl_wrapper,
+                                        newInstance()
+                                )
+                        }
+                        ?:
+                        wait.dec()
+                        if (wait == 0)
                             replaceWith(
                                     R.id.fl_wrapper,
                                     newInstance()
                             )
-                        }
-                        ?: Log.e(
+                        Log.e(
                                 TAG,
                                 "ononono falló el servicio perro: ${response.code()}, ${response.body()}",
                         )
             }
 
             override fun onFailure(call: Call<UserDex>, t: Throwable) {
+                wait.dec()
+                if (wait == 0)
+                    replaceWith(
+                            R.id.fl_wrapper,
+                            newInstance()
+                    )
                 Log.e(TAG, "ononon se rompió algo perro", t)
             }
         })
