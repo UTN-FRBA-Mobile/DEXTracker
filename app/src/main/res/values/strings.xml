@@ -31,4 +31,7 @@
     <string name="cancel">Cancel</string>
     <string name="dex_update_notification_title">A Pokedex you\'re following was updated</string>
     <string name="dex_update_notification_body">%s just updated his Pokedex for %s!</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_empty_pokedex">Not even a nibble…</string>
 </resources>
