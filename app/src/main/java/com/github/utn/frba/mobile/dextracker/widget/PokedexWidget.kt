@@ -14,7 +14,7 @@ import com.github.utn.frba.mobile.dextracker.R
  * Implementation of App Widget functionality.
  */
 
-public const val OPEN = "com.github.utn.frba.mobile.dextracker.widget.OPEN"
+const val WIDGET_VIEW_DEX = "com.github.utn.frba.mobile.dextracker.widget.WIDGET_VIEW_DEX"
 
 class PokedexWidget : AppWidgetProvider() {
     override fun onUpdate(
@@ -40,8 +40,9 @@ class PokedexWidget : AppWidgetProvider() {
         remoteViews.setEmptyView(R.id.pokedex_list_view, R.id.empty_view)
 
         val intent = Intent(context, LoginActivity::class.java)
-        intent.action = OPEN
+        intent.action = WIDGET_VIEW_DEX
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        intent.putExtra("test", "test")
         intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
 
         val pendingIntent = PendingIntent.getActivity(
@@ -62,5 +63,18 @@ class PokedexWidget : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent?.action == WIDGET_VIEW_DEX) {
+            val goToDetails = Intent(context, LoginActivity::class.java)
+            goToDetails.putExtras(intent)
+
+            goToDetails.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            goToDetails.data = Uri.parse(goToDetails.toUri(Intent.URI_INTENT_SCHEME))
+            context!!.startActivity(goToDetails)
+        }
+
+        super.onReceive(context, intent)
     }
 }

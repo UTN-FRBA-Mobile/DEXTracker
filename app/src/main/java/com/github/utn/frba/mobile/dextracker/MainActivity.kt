@@ -12,11 +12,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
+import com.github.utn.frba.mobile.dextracker.constants.REDIRECT
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
-import com.github.utn.frba.mobile.dextracker.firebase.redirect
+import com.github.utn.frba.mobile.dextracker.firebase.Redirection
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
+import com.github.utn.frba.mobile.dextracker.utils.objectMapper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
@@ -47,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
+        val redirect: Redirection? = this.intent.extras?.getString(REDIRECT)
+            ?.let { objectMapper.readValue(it) }
 
         val fragment = redirect?.also { Log.i(TAG, "Redirect to ${it.location()}") }
             ?.to()

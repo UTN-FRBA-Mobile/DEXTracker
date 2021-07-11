@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.github.utn.frba.mobile.dextracker.databinding.ActivityLoginBinding
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.constants.RC_SIGN_IN
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.User
+import com.github.utn.frba.mobile.dextracker.databinding.ActivityLoginBinding
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
@@ -153,8 +153,9 @@ class LoginActivity : AppCompatActivity() {
     private fun redirectToMain(session: Session) {
         inMemoryRepository.session = session
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+        intent.putExtras(this.intent)
         startActivity(intent)
     }
 

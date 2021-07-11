@@ -11,6 +11,8 @@ import androidx.core.app.NotificationCompat
 import com.github.utn.frba.mobile.dextracker.LoginActivity
 import com.github.utn.frba.mobile.dextracker.MyPreferences
 import com.github.utn.frba.mobile.dextracker.R
+import com.github.utn.frba.mobile.dextracker.constants.REDIRECT
+import com.github.utn.frba.mobile.dextracker.utils.objectMapper
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -37,8 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }
 
                 notification?.let { (redirection, title, body) ->
-                    redirect = redirection
-                    showNotification(title = title, body = body)
+                    showNotification(title = title, body = body, redirection = redirection)
                 }
             }
     }
@@ -49,9 +50,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(newToken)
     }
 
-    private fun showNotification(title: String, body: String) {
+    private fun showNotification(redirection: Redirection, title: String, body: String) {
         val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra(REDIRECT, objectMapper.writeValueAsString(redirection))
 
         val requestCode = 0
 
