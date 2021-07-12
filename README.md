@@ -21,6 +21,7 @@ Para esto, DexTracker se comunica mediante una API HTTP con dex-tracker.herokuap
 
 ►Agregar un pokemon a favoritos: podes armar una lista de tus mejores pokemones de todas tus pokedex
 
+<img src="https://user-images.githubusercontent.com/31671285/125361627-eccb6a00-e343-11eb-9e5a-6c71e4f2c500.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361207-63b43300-e343-11eb-9a9a-3ee43218820a.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361578-dde4b780-e343-11eb-9770-de6f80d9cdf6.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361585-dfae7b00-e343-11eb-8b13-9e0cd2ac4159.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361588-e0dfa800-e343-11eb-8a6f-8ce87cb1f692.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361570-db825d80-e343-11eb-98c6-7ebbd8504ef0.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361595-e3da9880-e343-11eb-9a5d-5903080cf08b.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361602-e5a45c00-e343-11eb-930a-f02d4a1acbfc.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361566-d9b89a00-e343-11eb-9961-9262ea075af3.png" height="500px" /><img src="https://user-images.githubusercontent.com/31671285/125361612-e806b600-e343-11eb-90f4-8d633128376b.png" height="500px" />
 
 ## Integrantes
 * Ulises De Piero
