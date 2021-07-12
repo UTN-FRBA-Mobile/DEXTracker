@@ -32,7 +32,7 @@ class ShareDexFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_share_dex, container, false).also{
             try {
                 val barcodeEncoder = BarcodeEncoder()
-                val bitmap = barcodeEncoder.encodeBitmap("${userId}@${dexId}", BarcodeFormat.QR_CODE, 500, 500)
+                val bitmap = barcodeEncoder.encodeBitmap("https://dex-tracker.herokuapp.com/users/${userId}/dex/${dexId}", BarcodeFormat.QR_CODE, 500, 500)
                 val imageViewQrCode: ImageView = it.findViewById(R.id.qrcode) as ImageView
                 imageViewQrCode.setImageBitmap(bitmap)
                 imageViewQrCode.animate().apply {
@@ -40,7 +40,7 @@ class ShareDexFragment : Fragment() {
                     alpha(1F) }.start()
             } catch (e: Exception) {
             }
-            Toast.makeText(this.context,"Scan the Pokedex!",Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context,"Ready to scan!",Toast.LENGTH_LONG).show()
         }
     }
 

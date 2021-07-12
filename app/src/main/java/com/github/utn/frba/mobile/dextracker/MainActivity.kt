@@ -1,7 +1,5 @@
 package com.github.utn.frba.mobile.dextracker
 
-//import com.google.android.material.snackbar.Snackbar
-
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
-import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
-import com.github.utn.frba.mobile.dextracker.repository.InMemoryRepository
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,26 +20,21 @@ import com.google.zxing.integration.android.IntentIntegrator
 const val cameraRequestCode = 9999
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var bottomNavigationView: BottomNavigationView
     private val perfilFragment = PerfilFragment()
     private val myDexFragment = MyDexFragment()
     private val favDexFragment = FavDEX_Fragment()
     private val favPokesFragment = FavPokes_Fragment()
-    /////////////////////////////////////////////////////////
-    //SOLO PARA TESTING
-    //val favPokesFragment = InfoPokeFragment("b2w2-national","eevee")
-    //val favPokesFragment = ShareDexFragment()
-    ////////////////////////////////////////////////////////
+    private var urlScan: String = ""
+    private var userId: String = ""
+    private var dexId: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        //Thread.sleep(2000)  //Solo lo use para testear el splash
         setTheme(R.style.Theme_DexTracker_NoActionBar)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            //Toast.makeText(this,"Aqui pondria el scanner...si tan solo tuviera uno",Toast.LENGTH_LONG).show()
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             /*if(Permisos.checkForPermissions(
                     this,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -53,15 +44,13 @@ class MainActivity : AppCompatActivity() {
             val scanner = IntentIntegrator(this)
             scanner.setOrientationLocked(false)
             scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-            scanner.setPrompt("Escanea el codigo QR de la PokeDEX deseada")
+            scanner.setPrompt("Scan the Pokedex!")
             scanner.initiateScan()
             //}
 
-            /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()*/
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
@@ -89,24 +78,12 @@ class MainActivity : AppCompatActivity() {
             val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
             if (result != null) {
                 if (result.contents == null) {
-                    Toast.makeText(this, "Cancelado :(", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Cancelled :(", Toast.LENGTH_LONG).show()
                 } else {
-                    //Aca iria la redireccion hacia la DEX
-                    val userId = result.contents.substringBefore("@")
-                    val dexId = result.contents.substringAfter("@")
-                    makeCurrentFragment(favDexFragment)
-                    favDexFragment.replaceWithAnimWith(
-                        resourceId  = R.id.fl_wrapper,
-                        other       = PokedexFragment.newInstance(
-                            userId = userId,
-                            dexId = dexId,
-                        ),
-                        enter   = R.anim.fragment_open_enter,
-                        exit    = R.anim.fragment_fade_exit,
-                        popEnter= R.anim.fragment_open_enter,
-                        popExit = R.anim.fragment_open_exit,
-                    )
-                    Toast.makeText(this, "Escaneado:  \nUserID: $userId \nDexID: $dexId", Toast.LENGTH_LONG).show()
+                    urlScan = result.contents
+                    val urlExtract = urlScan.substringAfter("https://dex-tracker.herokuapp.com/users/")
+                    userId = urlExtract.substringBefore("/dex/")
+                    dexId = urlExtract.substringAfter("/dex/")
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data)
@@ -126,10 +103,11 @@ class MainActivity : AppCompatActivity() {
                     val scanner = IntentIntegrator(this)
                     scanner.setOrientationLocked(false)
                     scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-                    scanner.setPrompt("Escanea el codigo QR de la PokeDEX deseada")
+                    scanner.setPrompt("Scan the Pokedex!")
                     scanner.initiateScan()
                 } else {
-                    Toast.makeText(this, "No me diste permiso!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "You didn't give me permission D:", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 return
             }
@@ -141,10 +119,10 @@ class MainActivity : AppCompatActivity() {
     private fun makeCurrentFragment(fragment: Fragment) =
         supportFragmentManager.commit {
                 setCustomAnimations(
-                        R.anim.fragment_open_enter,
-                        R.anim.fragment_fade_exit,
-                        R.anim.fragment_fade_enter,
-                        R.anim.fragment_open_exit,
+                    R.anim.fragment_open_enter,
+                    R.anim.fragment_fade_exit,
+                    R.anim.fragment_fade_enter,
+                    R.anim.fragment_open_exit,
                 )
             replace(R.id.fl_wrapper, fragment)
             }
@@ -169,5 +147,28 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         val sessionStorage = SessionStorage(this)
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(inMemoryRepository.session) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(urlScan != ""){
+            //Toast.makeText(this,"Scanned: $urlScan",Toast.LENGTH_LONG).show()//DEBUG ONLY
+            bottomNavigationView.selectedItemId = R.id.favdex
+            supportFragmentManager.commit {
+                setCustomAnimations(
+                    R.anim.fragment_open_enter,
+                    R.anim.fragment_fade_exit,
+                    R.anim.fragment_open_enter,
+                    R.anim.fragment_open_exit,
+                )
+                replace(
+                    R.id.fl_wrapper,
+                    PokedexFragment.newInstance(userId = userId,dexId = dexId)
+                )
+            }
+            userId = ""
+            dexId = ""
+            urlScan = ""
+        }
     }
 }

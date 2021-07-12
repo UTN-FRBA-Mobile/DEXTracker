@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.utn.frba.mobile.dextracker">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
     <application
+        android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,18 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DexTracker.NoActionBar">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.DexTracker">
-            <!-- <android:theme="@style/Theme.DexTracker.NoActionBar"> -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <activity
             android:name=".LoginActivity"
             android:noHistory="true"
@@ -33,15 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.DexTracker">
+        </activity>
+
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            tools:replace="screenOrientation" />
+            tools:replace="screenOrientation">
+        </activity>
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
 </manifest>

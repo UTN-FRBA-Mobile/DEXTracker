@@ -152,7 +152,7 @@ class LoginActivity : AppCompatActivity() {
         inMemoryRepository.session = session
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+        //intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY//El main activity tiene que tener backstack
         startActivity(intent)
     }
 
