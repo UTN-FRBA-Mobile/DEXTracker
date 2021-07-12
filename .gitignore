@@ -165,6 +165,8 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+
+
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
@@ -361,4 +363,5 @@ hs_err_pid*
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,android,linux,windows,intellij+all,gradle,visualstudiocode
 
 sensitive.conf
+google-services.json
 

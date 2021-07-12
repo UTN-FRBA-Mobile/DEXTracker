@@ -11,6 +11,7 @@ import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
 import com.github.utn.frba.mobile.dextracker.constants.RC_SIGN_IN
 import com.github.utn.frba.mobile.dextracker.data.LoginRequest
 import com.github.utn.frba.mobile.dextracker.data.User
+import com.github.utn.frba.mobile.dextracker.databinding.ActivityLoginBinding
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
 import com.github.utn.frba.mobile.dextracker.extensions.both
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
@@ -26,20 +27,21 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var sessionStorage: SessionStorage
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_DexTracker_NoActionBar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.parseColor("#EFEFEFEF")
         }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("527824744722-4hoj7bcnjvpa6co3tapt6faj5tbj4uor.apps.googleusercontent.com")
@@ -151,8 +153,9 @@ class LoginActivity : AppCompatActivity() {
     private fun redirectToMain(session: Session) {
         inMemoryRepository.session = session
         AsyncCoroutineExecutor.dispatch { sessionStorage.store(session) }
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         //intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY//El main activity tiene que tener backstack
+        intent.putExtras(this.intent)
         startActivity(intent)
     }
 

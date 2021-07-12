@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin"
+    android:theme="@style/ThemeOverlay.DexTracker.AppWidgetContainer">
+
+    <!-- Empty view is show if list items are empty -->
+    <ListView
+        android:id="@+id/pokedex_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white" />
+
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/widget_empty_pokedex"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>

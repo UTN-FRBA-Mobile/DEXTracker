@@ -22,6 +22,7 @@ import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
 import com.github.utn.frba.mobile.dextracker.service.dexTrackerService
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -264,7 +265,7 @@ class PokedexFragment private constructor() : Fragment() {
         }
     }
 
-    fun subscribe() {
+    private fun subscribe() {
         val subscribe = SubscribeDTO(
             userId = userId,
             dexId = dexId,
@@ -289,9 +290,13 @@ class PokedexFragment private constructor() : Fragment() {
                 Log.e(TAG, "onono fallo directamente la pegada de subscripcion perrito")
             }
         })
+
+        val topic = "$userId---$dexId"
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+        Log.i(TAG, "Subscribed to topic $topic")
     }
 
-    fun unsubscribe(subscriptionId: String) {
+    private fun unsubscribe(subscriptionId: String) {
         dexTrackerService.unsubscribe(
             userId = inMemoryRepository.session.userId,
             token = inMemoryRepository.session.dexToken,
@@ -311,6 +316,10 @@ class PokedexFragment private constructor() : Fragment() {
                 Log.e(TAG, "onono fallo directamente la pegada de dessubscripcion perrito")
             }
         })
+
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("$userId===$dexId")
+        val topic = "$userId---$dexId"
+        Log.i(TAG, "Unsubscribed from topic $topic")
     }
 
     private fun setSubscribed(subscribed: Boolean) {

@@ -4,15 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.utn.frba.mobile.dextracker.async.AsyncCoroutineExecutor
+import com.github.utn.frba.mobile.dextracker.constants.REDIRECT
 import com.github.utn.frba.mobile.dextracker.db.storage.SessionStorage
+import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
+import com.github.utn.frba.mobile.dextracker.firebase.Redirection
 import com.github.utn.frba.mobile.dextracker.repository.inMemoryRepository
+import com.github.utn.frba.mobile.dextracker.utils.objectMapper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
@@ -54,14 +60,14 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(2).isEnabled = false
         bottomNavigationView.selectedItemId = R.id.misdex
+        val redirect: Redirection? = this.intent.extras?.getString(REDIRECT)
+            ?.let { objectMapper.readValue(it) }
 
-        makeCurrentFragment(myDexFragment)
-//        makeCurrentFragment(DexDiffFragment.newInstance(
-//            leftUserId = "U-2021-02-13-ddf9d418-d114-435b-b901-69f57223dca4",
-//            leftUserDexId = "UD-2021-06-05-2ff23c99-7811-4e4a-a127-ebb4ab599af0",
-//            rightUserId = "U-2021-04-18-36d52c56-4cbd-4e81-9885-80e095990bf8",
-//            rightUserDexId = "UD-2021-04-18-a7263e1a-e894-4ffc-8a78-711ac7140e65"
-//        ))
+        val fragment = redirect?.also { Log.i(TAG, "Redirect to ${it.location()}") }
+            ?.to()
+            ?: myDexFragment
+        makeCurrentFragment(fragment)
+
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.perfil -> makeCurrentFragment(perfilFragment)
@@ -125,18 +131,14 @@ class MainActivity : AppCompatActivity() {
                     R.anim.fragment_open_exit,
                 )
             replace(R.id.fl_wrapper, fragment)
-            }
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
@@ -170,5 +172,9 @@ class MainActivity : AppCompatActivity() {
             dexId = ""
             urlScan = ""
         }
+    }
+
+    companion object {
+        private const val TAG = "MAIN"
     }
 }
