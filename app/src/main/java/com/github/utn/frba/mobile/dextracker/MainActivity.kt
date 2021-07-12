@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 replace(
                     R.id.fl_wrapper,
-                    PokedexFragment.newInstance(userId = userId,dexId = dexId)
+                    PokedexFragment.newInstance(userId = userId, dexId = dexId)
                 )
             }
             userId = ""

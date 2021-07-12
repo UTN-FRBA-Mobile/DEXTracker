@@ -71,23 +71,6 @@ class PerfilFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
-        Picasso.get()
-                .load(Uri.parse("url"))
-                .placeholder(R.drawable.placeholder_perfil)
-                .into(imageView, object: com.squareup.picasso.Callback {
-                    override fun onSuccess() {
-                        //set animations here
-                        imageView.animate().apply {
-                            duration = 1000
-                            alpha(1F)
-                        }.start()
-                    }
-                    override fun onError(e: java.lang.Exception?) {
-                        Log.e(TAG, "Respuesta invalida al intentar cargar la imagen de perfil")
-                    }
-                })
-
         fetchUser()
     }
 
@@ -111,7 +94,11 @@ class PerfilFragment : Fragment() {
                         ?.body()
                         ?.run {
                             user = this
-                            nick.text =  user.mail.substringBefore("@",user.mail)
+                            if (user.username != null)
+                                nick.text = user.username
+                            else
+                                nick.text =  user.mail.substringBefore("@",user.mail)
+                            loadImage()
                             completedDex()
                             pokeCaught()
                         }
@@ -125,6 +112,28 @@ class PerfilFragment : Fragment() {
                 Log.e(TAG, "Error al intentar obtener data del usuario", t)
             }
         })
+    }
+
+    private fun loadImage() {
+        var url = "url"
+        if (user.picture != null)
+            url = user.picture!!
+
+        Picasso.get()
+            .load(Uri.parse(url))
+            .placeholder(R.drawable.placeholder_perfil)
+            .into(imageView, object: com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    //set animations here
+                    imageView.animate().apply {
+                        duration = 1000
+                        alpha(1F)
+                    }.start()
+                }
+                override fun onError(e: java.lang.Exception?) {
+                    Log.e(TAG, "Respuesta invalida al intentar cargar la imagen de perfil")
+                }
+            })
     }
 
     companion object {

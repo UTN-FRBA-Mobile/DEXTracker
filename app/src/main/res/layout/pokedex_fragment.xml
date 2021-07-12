@@ -11,9 +11,8 @@
         android:id="@+id/compare_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/pokedex_search_bar"
-        android:layout_alignBottom="@+id/pokedex_search_bar"
-        android:layout_toEndOf="@+id/pokedex_search_bar"
+        android:layout_below="@+id/pokedex_search_bar"
+        android:layout_marginLeft="@dimen/fragment_horizontal_margin"
         android:background="@drawable/custom_background_screen"
         android:text="@string/compare"
         android:textColor="@color/orange_light"
@@ -68,7 +67,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pokedex_search_bar">
+        android:layout_below="@+id/compare_button">
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.github.utn.frba.mobile.dextracker.R
+import com.github.utn.frba.mobile.dextracker.data.Favourite
 import com.github.utn.frba.mobile.dextracker.data.Subscription
 import com.github.utn.frba.mobile.dextracker.extensions.percentageOf
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
@@ -18,13 +19,27 @@ import java.util.*
 import kotlin.properties.Delegates
 
 class FavDEXRecyclerViewAdapter(
-        private var dex: List<PokedexRef>,
-        private var sub: Set<Subscription>,
+        //private var dex: List<PokedexRef>,
+        //private var sub: Set<Subscription>,
         private val onClick: (String, String) -> Unit,
 ) : RecyclerView.Adapter<FavDEXRecyclerViewAdapter.ViewHolder>() {
-    private val originalDex = dex
+    private var dex: MutableList<PokedexRef> = mutableListOf()
+    var fullDex: List<PokedexRef> = emptyList()
+    var sub: Set<Subscription> = emptySet()
+
     var searchText: String by Delegates.observable("") { _, _, new ->
         filter(new)
+    }
+
+    fun loadSet(s: Set<Subscription>) {
+        sub = s
+        notifyDataSetChanged()
+    }
+
+    fun add(d: PokedexRef) {
+        dex.add(d)
+        fullDex = fullDex + d
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,19 +60,14 @@ class FavDEXRecyclerViewAdapter(
 
     private fun filter(search: String) {
         dex = if (search == "") {
-            originalDex
+            fullDex.toMutableList()
         } else {
-            originalDex.filter {
+            fullDex.filter {
                 it.game.displayName
-                    .toLowerCase(Locale.getDefault())
-                    .contains(search.toLowerCase(Locale.getDefault()))
-            }
+                        .toLowerCase(Locale.getDefault())
+                        .contains(search.toLowerCase(Locale.getDefault()))
+            }.toMutableList()
         }
-        notifyDataSetChanged()
-    }
-
-    fun add(d: PokedexRef) {
-        this.dex = dex + d
         notifyDataSetChanged()
     }
 

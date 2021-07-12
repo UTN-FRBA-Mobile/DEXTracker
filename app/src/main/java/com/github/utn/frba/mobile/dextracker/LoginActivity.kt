@@ -94,7 +94,10 @@ class LoginActivity : AppCompatActivity() {
             .enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) redirectToMain(
-                        session.copy(pokedex = response.body()!!.pokedex.map { PokedexRef(it) })
+                        session.copy(
+                                pokedex = response.body()!!.pokedex.map { PokedexRef(it) },
+                                //subscriptions = response.body()!!.subscriptions
+                        )
                     )
                     else {
                         Log.w(

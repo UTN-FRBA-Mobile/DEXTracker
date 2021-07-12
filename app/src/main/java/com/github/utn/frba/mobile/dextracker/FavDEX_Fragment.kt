@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.utn.frba.mobile.dextracker.adapter.FavDEXRecyclerViewAdapter
+import com.github.utn.frba.mobile.dextracker.data.User
 import com.github.utn.frba.mobile.dextracker.data.UserDex
-import com.github.utn.frba.mobile.dextracker.extensions.replaceWith
 import com.github.utn.frba.mobile.dextracker.extensions.replaceWithAnimWith
 import com.github.utn.frba.mobile.dextracker.model.PokedexRef
 import com.github.utn.frba.mobile.dextracker.model.Session
@@ -27,14 +27,11 @@ class FavDEX_Fragment : Fragment() {
     private lateinit var session: Session
     private lateinit var recyclerView: RecyclerView
     private lateinit var favDEXAdapter: FavDEXRecyclerViewAdapter
-    val dex: MutableList<PokedexRef> = mutableListOf()
-    var wait: Int = 0
+    private lateinit var loader: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         session = inMemoryRepository.session
-        wait = session.subscriptions.size
-        fillDex()
     }
 
     override fun onCreateView(
@@ -44,7 +41,7 @@ class FavDEX_Fragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_fav_dex_list, container, false).also {
             recyclerView = it.findViewById(R.id.fav_dex_recycler_view)
-            favDEXAdapter = FavDEXRecyclerViewAdapter(dex, session.subscriptions) { dexId, userId ->
+            favDEXAdapter = FavDEXRecyclerViewAdapter() { dexId, userId ->
                 replaceWithAnimWith(
                         R.id.fl_wrapper,
                         PokedexFragment.newInstance(
@@ -72,14 +69,41 @@ class FavDEX_Fragment : Fragment() {
                     })
 
             recyclerView.adapter = favDEXAdapter
-
+            loader = it.findViewById(R.id.pokedex_spinner)
             val layoutManager = GridLayoutManager(context, 1)
             recyclerView.layoutManager = layoutManager
+
+            fetchUser()
+
         }
     }
 
+    private fun fetchUser(){
+        val callResponse = dexTrackerService.fetchUser(userId = session.userId)
+
+        callResponse.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                loader.visibility = View.GONE
+                response.takeIf { it.isSuccessful }
+                        ?.body()
+                        ?.run {
+                            favDEXAdapter.loadSet(this.subscriptions)
+                            fillDex()
+                        }
+                        ?: Log.e(
+                                TAG,
+                                "Error en la respuesta de la data del usuario: ${response.code()}, ${response.body()}",
+                        )
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "Error al intentar obtener data del usuario", t)
+            }
+        })
+    }
+
     private fun fillDex() {
-        session.subscriptions.forEach {
+        favDEXAdapter.sub.forEach {
             fetchDex(
                     userId = it.userId,
                     dexId = it.dexId
@@ -95,21 +119,9 @@ class FavDEX_Fragment : Fragment() {
                 response.takeIf { it.isSuccessful }
                         ?.body()
                         ?.let {
-                            dex.add(PokedexRef(it))
-                            wait.dec()
-                            if (wait == 0)
-                                replaceWith(
-                                        R.id.fl_wrapper,
-                                        newInstance()
-                                )
+                            favDEXAdapter.add(PokedexRef(it))
                         }
                         ?:
-                        wait.dec()
-                        if (wait == 0)
-                            replaceWith(
-                                    R.id.fl_wrapper,
-                                    newInstance()
-                            )
                         Log.e(
                                 TAG,
                                 "ononono falló el servicio perro: ${response.code()}, ${response.body()}",
@@ -117,12 +129,6 @@ class FavDEX_Fragment : Fragment() {
             }
 
             override fun onFailure(call: Call<UserDex>, t: Throwable) {
-                wait.dec()
-                if (wait == 0)
-                    replaceWith(
-                            R.id.fl_wrapper,
-                            newInstance()
-                    )
                 Log.e(TAG, "ononon se rompió algo perro", t)
             }
         })

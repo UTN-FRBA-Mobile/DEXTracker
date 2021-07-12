@@ -153,7 +153,6 @@ class MyDexFragment : Fragment() {
                 response.takeIf { it.isSuccessful }
                     ?.body()
                     ?.let {
-                        //recargar fragment
                         inMemoryRepository.merge(dex = it)
                         loader.visibility = View.GONE
 
