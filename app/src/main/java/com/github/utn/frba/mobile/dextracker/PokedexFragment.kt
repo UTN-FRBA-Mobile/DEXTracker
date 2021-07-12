@@ -266,34 +266,39 @@ class PokedexFragment private constructor() : Fragment() {
     }
 
     private fun subscribe() {
-        val subscribe = SubscribeDTO(
-            userId = userId,
-            dexId = dexId,
-        )
+        val token = MyPreferences.getFirebaseToken(this.requireContext())
 
-        dexTrackerService.subscribe(
-            userId = inMemoryRepository.session.userId,
-            token = inMemoryRepository.session.dexToken,
-            subscription = subscribe,
-        ).enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                response.takeIf { it.isSuccessful }
-                    ?.body()
-                    ?.let {
-                        inMemoryRepository.put(it.subscriptions)
-                    } ?: run {
-                    Log.e(TAG, "onono perro fallo la subscripcion")
+        if (token != null) {
+            val subscribe = SubscribeDTO(
+                userId = userId,
+                dexId = dexId,
+                token = token,
+            )
+
+            dexTrackerService.subscribe(
+                userId = inMemoryRepository.session.userId,
+                token = inMemoryRepository.session.dexToken,
+                subscription = subscribe,
+            ).enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    response.takeIf { it.isSuccessful }
+                        ?.body()
+                        ?.let {
+                            inMemoryRepository.put(it.subscriptions)
+                        } ?: run {
+                        Log.e(TAG, "onono perro fallo la subscripcion")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "onono fallo directamente la pegada de subscripcion perrito")
-            }
-        })
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Log.e(TAG, "onono fallo directamente la pegada de subscripcion perrito")
+                }
+            })
 
-        val topic = "$userId---$dexId"
-        FirebaseMessaging.getInstance().subscribeToTopic(topic)
-        Log.i(TAG, "Subscribed to topic $topic")
+            val topic = "$userId---$dexId"
+            FirebaseMessaging.getInstance().subscribeToTopic(topic)
+            Log.i(TAG, "Subscribed to topic $topic")
+        }
     }
 
     private fun unsubscribe(subscriptionId: String) {
